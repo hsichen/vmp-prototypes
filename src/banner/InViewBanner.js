@@ -2,7 +2,7 @@ var $ = require('jquery');
 var samples = require('./samples');
 
 // local vars
-var banner;
+var banner, openHandle;
 var windowWidth;
 var windowHeight;
 var scrollThreshold;	
@@ -58,7 +58,30 @@ function InViewBanner(configs){
 	banner.append($('<img/>').attr('src', '//' + imageUrl));
 
 	// scroll listener
-	$(top).scroll(function showByScrollFractionAndThreshold() {
+	$(top).scroll(showByScrollFractionAndThreshold);
+
+	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
+
+	openHandle = $('<div></div>')
+		.css({
+			'background-color': 'cyan',
+			'border': '1px solid gray',
+			'border-radius': '5px',
+			'width': configs.width,
+			'height': '40px',
+			'z-index' : 5000,
+			'padding': 0,
+			'position': "fixed",
+			'top': (windowHeight - 40) + "px",
+			'left': ((windowWidth - configs.width) / 2 ) + "px",
+			'cursor': 'pointer',
+			'overflow': 'hidden'
+		})
+		.html('Click to open InView Banner')
+		.click(showByScrollFractionAndThreshold)
+		.hide();
+
+	function showByScrollFractionAndThreshold() {
 		var scrollTop = $(top).scrollTop();
 
 		if(scrollTop <= scrollThreshold) {
@@ -75,9 +98,7 @@ function InViewBanner(configs){
 				self.hide();
 			}, 2000);
 		}
-	});
-
-	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
+	}
 }
 
 function isAttached() {
@@ -93,11 +114,16 @@ InViewBanner.prototype.constructor = InViewBanner;
 
 
 InViewBanner.prototype.hide = function () {
-	banner.animate({top: windowHeight+1});
+	banner.animate({top: windowHeight+1},
+		function(){
+			openHandle.fadeIn();
+
+		});
 };
 
 InViewBanner.prototype.showInitial = function () {
 	if(!isAttached()) {
 		$(top.document.body).append(banner);
+		$(top.document.body).append(openHandle);
 	}
 }
