@@ -16,7 +16,7 @@ function InViewBanner(configs){
 	banner = $('<div></div>')
 		.css({
 			'background-color': 'transparent',
-			'border': '1px solid gray',
+			// 'border': '1px solid gray',
 			'width': configs.width,
 			'height': configs.height + 16,	// acounts for icons
 			'z-index' : 5000,
@@ -30,8 +30,6 @@ function InViewBanner(configs){
 		});
 
 	banner.append($('<img/>').attr('src', 'http://' + imageUrl));
-
-
 
 
 	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
