@@ -99,7 +99,7 @@ function InViewBanner(configs){
 	banner = $('<div></div>')
 		.css({
 			'background-color': 'transparent',
-			'border': '1px solid gray',
+			// 'border': '1px solid gray',
 			'width': configs.width,
 			'height': configs.height + 16,	// acounts for icons
 			'z-index' : 5000,
@@ -113,8 +113,6 @@ function InViewBanner(configs){
 		});
 
 	banner.append($('<img/>').attr('src', 'http://' + imageUrl));
-
-
 
 
 	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
@@ -10405,8 +10403,16 @@ var samples = {
 		},
 		{
 			'url': 'd37p6u34ymiu6v.cloudfront.net/65/19/7b/65197bb001fafc737822106cf7798b14.jpg',
+		},
+		{
+			'url': 'd37p6u34ymiu6v.cloudfront.net/67/99/23/67992321f0e802b1d76343aa15d8397a.png',
+		},
+		{
+			'url': 'd37p6u34ymiu6v.cloudfront.net/1-md5-539fa03332efc4b9aaffde7ede3e443f.gif',
+		},
+		{
+			'url': 'd37p6u34ymiu6v.cloudfront.net/4b/45/ce/4b45ce6e250a049c9aef09d16fd5989d.jpg',
 		}
-
 	]
 };
 
