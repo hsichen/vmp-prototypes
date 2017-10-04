@@ -10455,7 +10455,6 @@ function InViewBanner(configs){
 
 	openHandle.click(function(e){
 		console.log("Open handle is clicked");
-		openHandle.hide();
 		banner.css('top', windowHeight);
 		banner.animate({top:(windowHeight - banner.height()) + "px"},
 			function(){
