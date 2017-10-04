@@ -10414,30 +10414,7 @@ function InViewBanner(configs){
 	banner.append($('<img/>').attr('src', '//' + imageUrl));
 
 	// scroll listener
-	$(top).scroll(showByScrollFractionAndThreshold);
-
-	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
-
-	openHandle = $('<div></div>')
-		.css({
-			'background-color': 'cyan',
-			'border': '1px solid gray',
-			'border-radius': '5px',
-			'width': configs.width,
-			'height': '40px',
-			'z-index' : 5000,
-			'padding': 0,
-			'position': "fixed",
-			'top': (windowHeight - 40) + "px",
-			'left': ((windowWidth - configs.width) / 2 ) + "px",
-			'cursor': 'pointer',
-			'overflow': 'hidden'
-		})
-		.html('Click to open InView Banner')
-		.click(showByScrollFractionAndThreshold)
-		.hide();
-
-	function showByScrollFractionAndThreshold() {
+	$(top).scroll(function showByScrollFractionAndThreshold() {
 		var scrollTop = $(top).scrollTop();
 
 		if(scrollTop <= scrollThreshold) {
@@ -10454,7 +10431,37 @@ function InViewBanner(configs){
 				self.hide();
 			}, 2000);
 		}
-	}
+	});
+
+	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
+
+	openHandle = $('<div></div>')
+		.css({
+			'background-color': 'cyan',
+			'border': '1px solid gray',
+			'border-radius': '5px',
+			'width': configs.width,
+			'height': '40px',
+			'z-index' : 500,
+			'padding': 0,
+			'position': "fixed",
+			'top': (windowHeight - 40) + "px",
+			'left': ((windowWidth - configs.width) / 2 ) + "px",
+			'cursor': 'pointer',
+			'overflow': 'hidden'
+		})
+		.html('Click to open InView Banner')
+		.hide();
+
+	openHandle.click(function(e){
+		console.log("Open handle is clicked");
+		openHandle.hide();
+		banner.css('top', windowHeight);
+		banner.animate({top:(windowHeight - banner.height()) + "px"},
+			function(){
+				openHandle.fadeOut(500);
+			});
+	});
 }
 
 function isAttached() {
@@ -10468,12 +10475,10 @@ function isInFullView() {
 module.exports = InViewBanner;
 InViewBanner.prototype.constructor = InViewBanner;
 
-
 InViewBanner.prototype.hide = function () {
 	banner.animate({top: windowHeight+1},
 		function(){
-			openHandle.fadeIn();
-
+			openHandle.fadeIn(500);
 		});
 };
 
