@@ -88,6 +88,19 @@ function InPageBanner(configs) {
 
     banner.append(adImage1);
     banner.append(adImage2);
+
+    $(top).scroll(function() {
+		var scrolled = $(top).scrollTop();
+
+        console.log("Scrolled to", scrolled);
+        if(scrolled <= scrollThreshold) {
+            toggleBannerImage(1.0);
+        	return;
+		}
+
+		var showFraction = Math.min(scrolled - scrollThreshold, 100) / 100;
+		toggleBannerImage(1 - showFraction);
+	});
 }
 
 module.exports = InPageBanner;
@@ -95,16 +108,21 @@ InPageBanner.prototype.constructor = InPageBanner;
 
 InPageBanner.prototype.showInitial = function() {
 	banner.appendTo(parent);
-	var ghg = false;
+	var t = false;
 	parent.before($('<button></button>')
-		.html('GHG')
+		.html('Fully Toggle Ad Images via Fading Effect')
 		.click(function(){
-    		toggleBannerImage(ghg? 1.0 : 0);
-		    ghg = !ghg;
+    		animateBannerImage(t? 1.0 : 0);
+		    t = !t;
     	})) ;
 };
 
-function toggleBannerImage(opacityValue) {
+function animateBannerImage(opacityValue) {
     adImage1.animate({opacity: opacityValue});
     adImage2.animate({opacity: 1.0 - opacityValue});
+}
+
+function toggleBannerImage(opacityValue) {
+    adImage1.css({opacity: opacityValue});
+    adImage2.css({opacity: 1.0 - opacityValue});
 }
