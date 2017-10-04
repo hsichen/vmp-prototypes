@@ -2,6 +2,7 @@ var $ = require('jquery');
 var InViewBanner = require('./banner/InViewBanner.js');
 var InPageBanner = require('./banner/InPageBanner.js');
 
+// doesn't need to wait for document
 var inviewBanner = new InViewBanner({
 	width:300,
 	height:250,
@@ -9,6 +10,8 @@ var inviewBanner = new InViewBanner({
 	scrollThreshold: 100
 });
 
+// needs to wait for doc ready
+var inpageBanner;
 
 $(document).ready(function(){
 	$('#bannerRefresh').click(
@@ -17,12 +20,19 @@ $(document).ready(function(){
 		}
 	);
 
+	inpageBanner = new InPageBanner({
+		embedSelector: '#inpageBanner',
+		width:728,
+		height:90,
+		scrollThreshold: 100
+	});
 });
+
 top.doInView = function doInView() {
 	inviewBanner.showInitial();
 };
 
 top.doInPage = function(){
-	alert('inpage!');
+	inpageBanner.showInitial();
 };
 
