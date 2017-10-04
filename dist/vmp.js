@@ -10340,9 +10340,9 @@ var inviewBanner = new InViewBanner({
 
 
 $(document).ready(function(){
-	$('#testShowInView').click(
+	$('#bannerRefresh').click(
 		function() {
-			// inviewBanner.showInitial();
+			inviewBanner.refresh();
 		}
 	);
 });
@@ -10411,7 +10411,7 @@ function InViewBanner(configs){
 			'height' : '20px'
 		})
 	);
-	banner.append($('<img/>').attr('src', '//' + imageUrl));
+	banner.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
 
 	// scroll listener
 	$(top).scroll(function showByScrollFractionAndThreshold() {
@@ -10486,6 +10486,13 @@ InViewBanner.prototype.showInitial = function () {
 		$(top.document.body).append(banner);
 		$(top.document.body).append(openHandle);
 	}
+}
+
+InViewBanner.prototype.refresh = function () {
+	banner.animate({top: windowHeight+1}, function(){
+		banner.find('#adImage').attr('src', '//' + samples.get(banner.width(), banner.height()-16));
+		banner.animate({top: windowHeight - banner.height()});
+	});
 }
 
 /***/ }),

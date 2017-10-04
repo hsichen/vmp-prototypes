@@ -11,9 +11,9 @@ var inviewBanner = new InViewBanner({
 
 
 $(document).ready(function(){
-	$('#testShowInView').click(
+	$('#bannerRefresh').click(
 		function() {
-			// inviewBanner.showInitial();
+			inviewBanner.refresh();
 		}
 	);
 });
