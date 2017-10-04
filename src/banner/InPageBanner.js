@@ -29,11 +29,51 @@ function InPageBanner(configs) {
 	windowHeight = $(top).height();
 	scrollThreshold = configs.scrollThreshold || 100;
 
+	banner = $('<div></div>')
+		.css({
+			'border' : '1px solid #DECEDE',
+			'background-color': 'transparent',
+			'width': (configs.width + 16) + 'px',		// accounts for icons
+			'height': (configs.height + 16) + 'px',		// accounts for indicator
+			'z-index' : 5000,
+			'padding': 0,
+			'opacity': 1.0,
+			'position': "relative",
+			'overflow': 'hidden'
+		});
+
+	/*
+	banner.append($('<img/>').attr('src', CLOSE_IMAGE).css({
+			'float': 'right',
+			'width': '20px',
+			'height' : '20px',
+			'cursor' : 'pointer'
+		}).click(function() {
+			self.hide();
+		})
+	);
+	banner.append($('<img/>').attr('src', INFO_IMAGE).css({
+			'float': 'right',
+			'width': '20px',
+			'height' : '20px'
+		})
+	);
+	*/
+	banner.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
 }
 
 module.exports = InPageBanner;
 InPageBanner.prototype.constructor = InPageBanner;
 
 InPageBanner.prototype.showInitial = function() {
-	alert('hi');
+	banner.appendTo(parent);
+	var ghg = false;
+	parent.before($('<button></button')
+		.html('GHG')
+		.click(function(){
+		banner.animate({
+			opacity: ghg ? 1.0 : 0
+		});
+		ghg = !ghg;
+	}));
 }
