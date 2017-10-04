@@ -2,7 +2,7 @@ var $ = require('jquery');
 var samples = require('./samples');
 
 // local vars
-var parent, banner;
+var parent, banner, adImage1, adImage2;
 var windowWidth;
 var windowHeight;
 var scrollThreshold;	
@@ -24,7 +24,8 @@ function InPageBanner(configs) {
 	}
 
 	var self = this;
-	var imageUrl = samples.get(configs.width, configs.height);
+	var imageUrl1 = samples.get(configs.width, configs.height);
+    var imageUrl2 = samples.get(configs.width, configs.height);
 	windowWidth = $(top).width();
 	windowHeight = $(top).height();
 	scrollThreshold = configs.scrollThreshold || 100;
@@ -33,11 +34,10 @@ function InPageBanner(configs) {
 		.css({
 			'border' : '1px solid #DECEDE',
 			'background-color': 'transparent',
-			'width': (configs.width + 16) + 'px',		// accounts for icons
+			'width': (configs.width + 20) + 'px',		// accounts for icons
 			'height': (configs.height + 16) + 'px',		// accounts for indicator
 			'z-index' : 5000,
 			'padding': 0,
-			'opacity': 1.0,
 			'position': "relative",
 			'overflow': 'hidden'
 		});
@@ -59,7 +59,24 @@ function InPageBanner(configs) {
 		})
 	);
 	*/
-	banner.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
+    adImage1 = $('<img/>').attr('src', '//' + imageUrl1).attr('id', 'adImage1')
+        .css({
+            'width': configs.width,
+            'height': configs.height,
+            'opacity': 1.0
+        });
+    adImage2 = $('<img/>').attr('src', '//' + imageUrl2).attr('id', 'adImage2')
+        .css({
+            'width': configs.width,
+            'height': configs.height,
+            'opacity': 0.0,
+            'position': 'absolute',
+            'top': 0,
+            'left': 0
+        });
+
+    banner.append(adImage1);
+    banner.append(adImage2);
 }
 
 module.exports = InPageBanner;
@@ -71,9 +88,12 @@ InPageBanner.prototype.showInitial = function() {
 	parent.before($('<button></button>')
 		.html('GHG')
 		.click(function(){
-		banner.animate({
-			opacity: ghg ? 1.0 : 0
-		});
-		ghg = !ghg;
-	}));
+    		toggleBannerImage(ghg? 1.0 : 0);
+		    ghg = !ghg;
+    	})) ;
 };
+
+function toggleBannerImage(opacityValue) {
+    adImage1.animate({opacity: opacityValue});
+    adImage2.animate({opacity: 1.0 - opacityValue});
+}
