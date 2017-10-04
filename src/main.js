@@ -16,6 +16,13 @@ $(document).ready(function(){
 			inviewBanner.refresh();
 		}
 	);
-});
 
-inviewBanner.showInitial();
+});
+top.doInView = function doInView() {
+	inviewBanner.showInitial();
+};
+
+top.doInPage = function(){
+	alert('inpage!');
+};
+

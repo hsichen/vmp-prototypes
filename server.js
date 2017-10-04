@@ -3,8 +3,11 @@ var express = require('express');
 var app = express();
 var port = 80;
 
-app.get(/test/, function(req, res) {
-	res.sendFile(__dirname + '/test.html');
+app.get(/inview/, function(req, res) {
+	res.sendFile(__dirname + '/inview.html');
+});
+app.get(/inpage/, function(req, res) {
+	res.sendFile(__dirname + '/inpage.html');
 });
 app.get(/vmp/, function(req, res) {
 	res.sendFile(__dirname + '/dist/vmp.js');
