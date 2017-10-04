@@ -19,7 +19,7 @@ function InPageBanner(configs) {
 	parent = $(configs.embedSelector);
 
 	console.log("InPage init ", parent.length > 0 ? "embedded location with selector: " + configs.embedSelector : "no element with selector: " + configs.embedSelector + " found, returning");
-	if(parent.length == 0) {
+	if(parent.length === 0) {
 		return;
 	}
 
@@ -68,7 +68,7 @@ InPageBanner.prototype.constructor = InPageBanner;
 InPageBanner.prototype.showInitial = function() {
 	banner.appendTo(parent);
 	var ghg = false;
-	parent.before($('<button></button')
+	parent.before($('<button></button>')
 		.html('GHG')
 		.click(function(){
 		banner.animate({
@@ -76,4 +76,4 @@ InPageBanner.prototype.showInitial = function() {
 		});
 		ghg = !ghg;
 	}));
-}
+};
