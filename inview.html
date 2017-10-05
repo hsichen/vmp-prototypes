@@ -3,14 +3,18 @@
 <head lang="en">
 	<meta charset="UTF-8">
 	<title></title>
+	<script type="text/javascript" src="vmp.js" async></script>
+	<script type="text/javascript">
+		var configs = {
+			width:300,
+			height:250,
+			initialPosition: 0.5,
+			scrollThreshold: 100
+		};
+	</script>
 </head>
-<body>
+<body onload="doInView(configs);">
 <p id="desc">Simple test page for bundled scripts.</p>
-<script>
-	// netseer_tag_id = "25621";
-</script>
-<script src="vmp.js"></script>
-<script type="text/javascript">doInView();</script>
 <button id="bannerRefresh"><b>Pretend Banner Refresh</b></button>
 <div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
 </body>

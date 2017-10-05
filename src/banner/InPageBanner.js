@@ -19,7 +19,6 @@ function InPageBanner(configs) {
 
 	parent = $(configs.embedSelector);
 
-	console.log("InPage init ", parent.length > 0 ? "embedded location with selector: " + configs.embedSelector : "no element with selector: " + configs.embedSelector + " found, returning");
 	if(parent.length === 0) {
 		return;
 	}

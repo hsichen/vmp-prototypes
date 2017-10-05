@@ -3,10 +3,21 @@
 <head lang="en">
 	<meta charset="UTF-8">
 	<title></title>
+	<script type="text/javascript" src="vmp.js" async></script>
+	<script type="text/javascript">
+		var configs = {
+			embedSelector: '#inpageBanner',
+			width: 728,
+			height: 90,
+			scale: true,
+			indicators: true,
+			transition_effect: 'fade',	// or 'slide', 'none', etc
+			scrollThreshold: 200
+		};
+	</script>
 </head>
-<body onload="doInPage()">
+<body onload="doInPage(configs)">
 <p id="desc" style="height:350px">Simple test page for bundled scripts.</p>
-<script src="vmp.js"></script>
 <div id="inpageBanner" style="margin: 10px"></div>
 <div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
 </body>
