@@ -28,8 +28,7 @@ var InViewBanner = function(configs){
 			'height': configs.height + 16,	// acounts for icons
 			'position': "fixed",
 			'top': (windowHeight - (initialPositionFraction * configs.height)) + "px",
-			'left': ((windowWidth - configs.width) / 2 ) + "px",
-			'overflow': 'hidden'
+			'left': ((windowWidth - configs.width) / 2 ) + "px"
 		});
 
 
