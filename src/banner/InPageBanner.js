@@ -34,18 +34,19 @@ var InPageBanner = function (configs) {
 		})
 	);
 
-    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height)).attr('id', 'adImage')
+    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height))
+    	.attr('id', 'adImage')
+    	.attr('width', configs.width)
+    	.attr('height', configs.height)
         .css({
             'width': configs.width,
             'height': configs.height,
-            'opacity': 1.0,
-            'position': 'absolute',
-            'top': 0,
-            'left': 0
         });
 
     banner.append(this.container);
     this.container.append(adImage);
+
+    return banner;
 }
 
 InPageBanner.prototype = Object.create(BannerClass.prototype);
@@ -58,7 +59,6 @@ InPageBanner.prototype.start = function() {
 
 InPageBanner.prototype.show = function () {
 	// this.banner.css("height", "0px");
-	console.log('hi', this.banner.height());
 	this.banner.slideDown('slow');
 }
 

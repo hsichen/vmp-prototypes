@@ -1,7 +1,7 @@
 var $ = require('jquery');
 // var _ = require('lodash');
 var InViewBanner = require('./banner/InViewBanner.js');
-var InPageBanner = require('./banner/InPageBanner.js');
+var MultiImageInPageBanner = require('./banner/MultiImageInPageBanner.js');
 
 top.doInView = function doInView(configs) {
 	// doesn't need to wait for document to finish loading 
@@ -17,7 +17,8 @@ top.doInView = function doInView(configs) {
 };
 
 top.doInPage = function(configs){
-	var inpageBanner = new InPageBanner(configs);
+	var inpageBanner = new MultiImageInPageBanner(configs);
 	inpageBanner.start();
 };
 
+top.$ = $;
