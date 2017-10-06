@@ -7,7 +7,7 @@ top.doInView = function doInView(configs) {
 	// doesn't need to wait for document to finish loading 
 	//  - but that decision is left up to the bootstrap html
 	var inviewBanner = new InViewBanner(configs);
-	inviewBanner.showInitial();
+	inviewBanner.start();
 
 	$('#bannerRefresh').click(
 		function() {
@@ -18,6 +18,6 @@ top.doInView = function doInView(configs) {
 
 top.doInPage = function(configs){
 	var inpageBanner = new InPageBanner(configs);
-	inpageBanner.showInitial();
+	inpageBanner.start();
 };
 

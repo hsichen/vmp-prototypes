@@ -2,7 +2,7 @@ var $ = require('jquery');
 var samples = require('./samples');
 
 // local vars
-var banner, openHandle;
+var openHandle;
 var windowWidth;
 var windowHeight;
 var scrollThreshold;	
@@ -23,7 +23,7 @@ function InViewBanner(configs){
 	scrollThreshold = configs.scrollThreshold || 100;
 	var initialPositionFraction = configs.initialPosition || 0.5;	// percentage of top-portion of banner in view
 
-	banner = $('<div></div>')
+	this.banner = $('<div></div>')
 		.css({
 			'background-color': 'transparent',
 			// 'border': '1px solid gray',
@@ -40,7 +40,7 @@ function InViewBanner(configs){
 		});
 
 
-	banner.append($('<img/>').attr('src', CLOSE_IMAGE).css({
+	this.banner.append($('<img/>').attr('src', CLOSE_IMAGE).css({
 			'float': 'right',
 			'width': '20px',
 			'height' : '20px',
@@ -49,13 +49,13 @@ function InViewBanner(configs){
 			self.hide();
 		})
 	);
-	banner.append($('<img/>').attr('src', INFO_IMAGE).css({
+	this.banner.append($('<img/>').attr('src', INFO_IMAGE).css({
 			'float': 'right',
 			'width': '20px',
 			'height' : '20px'
 		})
 	);
-	banner.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
+	this.banner.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
 
 	// scroll listener
 	$(top).scroll(function showByScrollFractionAndThreshold() {
@@ -68,7 +68,7 @@ function InViewBanner(configs){
 		var scrollDiff = (scrollTop - scrollThreshold);
 		var revealAmount = (initialPositionFraction * configs.height + scrollDiff);
 
-		banner.css({top: (windowHeight - Math.min(revealAmount, configs.height + 16)) + "px"});
+		this.banner.css({top: (windowHeight - Math.min(revealAmount, configs.height + 16)) + "px"});
 
 		if(revealAmount >= (configs.height + 16)) {
 			setTimeout(function(){
@@ -76,8 +76,6 @@ function InViewBanner(configs){
 			}, 2000);
 		}
 	});
-
-	console.log('InViewBanner init on window dimensions of', windowWidth, windowHeight);
 
 	openHandle = $('<div></div>')
 		.css({
@@ -98,9 +96,8 @@ function InViewBanner(configs){
 		.hide();
 
 	openHandle.click(function(e){
-		console.log("Open handle is clicked");
-		banner.css('top', windowHeight);
-		banner.animate({top:(windowHeight - banner.height()) + "px"},
+		this.banner.css('top', windowHeight);
+		this.banner.animate({top:(windowHeight - this.banner.height()) + "px"},
 			function(){
 				openHandle.fadeOut(500);
 			});
@@ -108,11 +105,11 @@ function InViewBanner(configs){
 }
 
 function isAttached() {
-	return banner && $.contains(top.document, banner[0]);
+	return this.banner && $.contains(top.document, this.banner[0]);
 }
 
 function isInFullView() {
-	return windowHeight - banner.css('top') >= banner.height();
+	return windowHeight - this.banner.css('top') >= this.banner.height();
 }
 
 module.exports = InViewBanner;
@@ -125,16 +122,17 @@ InViewBanner.prototype.hide = function () {
 		});
 };
 
-InViewBanner.prototype.showInitial = function () {
+InViewBanner.prototype.start = function () {
 	if(!isAttached()) {
-		$(top.document.body).append(banner);
+		$(top.document.body).append(this.banner);
 		$(top.document.body).append(openHandle);
 	}
 }
 
 InViewBanner.prototype.refresh = function () {
-	banner.animate({top: windowHeight+1}, function(){
-		banner.find('#adImage').attr('src', '//' + samples.get(banner.width(), banner.height()-16));
-		banner.animate({top: windowHeight - banner.height()});
+	var b = this.banner;
+	b.animate({top: windowHeight+1}, function(){
+		b.find('#adImage').attr('src', '//' + samples.get(b.width(), b.height()-16));
+		b.animate({top: windowHeight - b.height()});
 	});
 }

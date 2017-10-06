@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="vmp.js" async></script>
 	<script type="text/javascript">
 		var configs = {
-			embedSelector: '#inpageBanner',
+			selector: '#bannerLocation',
 			width: 728,
 			height: 90,
 			scale: true,
@@ -18,7 +18,7 @@
 </head>
 <body onload="doInPage(configs)">
 <p id="desc" style="height:350px">Simple test page for bundled scripts.</p>
-<div id="inpageBanner" style="margin: 10px"></div>
+<div id="bannerLocation" style="margin: 10px; padding: 20px; border: 1px solid green"><b>InPage Banner goes below this placeholder element</b></div>
 <div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
 </body>
 </html>

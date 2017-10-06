@@ -2,7 +2,7 @@ var $ = require('jquery');
 var samples = require('./samples');
 
 // local vars
-var parent, banner, adImage1, adImage2;
+var adImage1, adImage2;
 var windowWidth;
 var windowHeight;
 var scrollThreshold;	
@@ -17,9 +17,9 @@ function InPageBanner(configs) {
 		throw new Error('configs are required');
 	}
 
-	parent = $(configs.embedSelector);
+	this.attachTarget = $(configs.selector);
 
-	if(parent.length === 0) {
+	if(this.attachTarget.length === 0) {
 		return;
 	}
 
@@ -30,7 +30,7 @@ function InPageBanner(configs) {
 	windowHeight = $(top).height();
 	scrollThreshold = configs.scrollThreshold || 100;
 
-	banner = $('<div></div>')
+	this.banner = $('<div></div>')
 		.css({
 			// 'border' : '1px solid #DECEDE',
 			'background-color': 'transparent',
@@ -43,7 +43,7 @@ function InPageBanner(configs) {
 		});
 
 
-	banner.append($('<img/>').attr('src', CLOSE_IMAGE).css({
+	this.banner.append($('<img/>').attr('src', CLOSE_IMAGE).css({
 			'position': 'absolute',
 			'top': 0,
 			'right': 0,
@@ -52,7 +52,7 @@ function InPageBanner(configs) {
 			'cursor' : 'pointer'
 		})
 	);
-	banner.append($('<img/>').attr('src', INFO_IMAGE).css({
+	this.banner.append($('<img/>').attr('src', INFO_IMAGE).css({
         	'position': 'absolute',
     	    'top': 21,
 	        'right': 0,
@@ -60,7 +60,7 @@ function InPageBanner(configs) {
 			'height' : '20px'
 		})
 	);
-    banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
+    this.banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
             'position': 'absolute',
             'bottom': 0,
             'left': 1,
@@ -85,8 +85,8 @@ function InPageBanner(configs) {
             'left': 0
         });
 
-    banner.append(adImage1);
-    banner.append(adImage2);
+    this.banner.append(adImage1);
+    this.banner.append(adImage2);
 
     $(top).scroll(function() {
 		var scrolled = $(top).scrollTop();
@@ -105,15 +105,17 @@ function InPageBanner(configs) {
 module.exports = InPageBanner;
 InPageBanner.prototype.constructor = InPageBanner;
 
-InPageBanner.prototype.showInitial = function() {
-	banner.appendTo(parent);
+InPageBanner.prototype.start = function() {
 	var t = false;
-	parent.before($('<button></button>')
+	this.attachTarget.after($('<button></button>')
+		.css('margin', '5px')
 		.html('Fully Toggle Ad Images via Fading Effect')
 		.click(function(){
     		animateBannerImage(t? 1.0 : 0);
 		    t = !t;
     	})) ;
+
+	this.attachTarget.after(this.banner);
 };
 
 function animateBannerImage(opacityValue) {
