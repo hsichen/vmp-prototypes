@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -8,7 +10,7 @@ module.exports = function(grunt) {
             build: {
                 entry: "./src/main.js",
                 output: {
-                    path: "./dist/",
+                    path: path.resolve(__dirname, 'dist'),
                     filename: "vmp.js"
                 }
             }
