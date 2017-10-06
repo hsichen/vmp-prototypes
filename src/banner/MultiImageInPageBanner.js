@@ -3,8 +3,7 @@ var samples = require('../samples');
 var InPageBannerClass = require('./InPageBanner.js');
 
 // constants
-var INDICATOR_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAXCAYAAABu8J3cAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAALSSURBVEhLxZY5iFNRFIbT2wiujBiw0cZiBLXQ1kpEEEvBwg0rG7UXBAULcUBBRQbUSpFxVh0dzIzjrtkzk/1l30P2lWy/51wNjvLMbrzwE3Lffe9+75z/nHcV5XIZuVzuv0tRKBSQSqWQTCaHKt6TAUqlkpAik8kgEokgHA4PVbFYDByEer2ORqPxA4QvhEKhoSoajaJYLAoIHm1BgiRvMAiD1w8jye4PIBCUX9uNugbxBIJQOb049MaIwyoTxvQOWH0BASi3vlN1DWKjCNzUObBlWoNNU2rsmNXi4IIBD0ySiJCfoiV3Xzt1DWKht7+mtWMjQZx8t4qrGjuOLJqw/7Ve/B9fkaD1+LuOUM8gWyki94wSHP4gFilVpz6YMTqvx95Xelz4ZMGc3SMi5OkwQj2DjMxocJ/S4aONvrp9uE5zj1ddOE1AIwS564UOl79YsSz54CJfBWSetVZ9g7B5p2xuHKX0LEtecX3S6sbxtyvYRmt2v9SJ9JkoOq1g+gbht12i1JyhSHx2+YQ3JJp7T5E4R3ObyUs757S4Qfe0SlPfIE7yyDj97iF/MBBHiHvMU4tLmHg7rTtAVfWQTMz9R+6ZrL5BuJzvGJxQUhk/s7ihcnhxibwxOq8TpX2CKmmaUucmwFaVNBCQ2wTCfYV9wmlYP6nGsSUTJgiMq6qTUu4ZhMv3FnVVI/WMu0Yn1j3/BuWMVsA8Mbuhp3lRLR22fwbhr27XIBvIhPuoZ5z/aMYjyv9FSseY3inKlX0jd28rxeNxVCoVAcGjLQh/5DgVSkoNp4O/ObM2j5j39/jx4/34TMJHgOZoC8LO5zI9S6V5RW3DApkz0GH3/Jv4LMJpWTvagrDx+M3ZhNwvWpVkJ+K98vn8b9Hg0RZkUOI9OBIMUavVfm7/ayiy2axYwC4etPi5bMpEIoF0Oi3S8WckmkNRrVbBJ/l/Ja4MjkCzTOUH8B2X0B3HJllB/AAAAABJRU5ErkJggg==";
-
+var INDICATOR_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
 
 var MultiImageInPageBanner = function (configs) {
     if(!configs) {
@@ -17,10 +16,10 @@ var MultiImageInPageBanner = function (configs) {
     
     // overriding adjustments
     banner.css({
-        'width': (configs.width + 20 + 20) + 'px'    // account for indicators and icons
+        'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
     });
     this.container.css({
-        'margin-left': '20px'   // account for indicators
+        'margin-left': '17px'   // account for indicators
     });
 
 
@@ -29,7 +28,7 @@ var MultiImageInPageBanner = function (configs) {
             'position': 'absolute',
             'bottom': 0,
             'left': 1,
-            'width': '20px',
+            'width': '16px',
             'height' : '16px'
         })
     );
@@ -49,7 +48,7 @@ var MultiImageInPageBanner = function (configs) {
     $(top).scroll(function() {
         var scrolled = $(top).scrollTop();
 
-        console.log("Scrolled to", scrolled);
+        console.debug("Scrolled to", scrolled);
         if(scrolled <= scrollThreshold) {
             toggleBannerImage(1.0);
             return;
