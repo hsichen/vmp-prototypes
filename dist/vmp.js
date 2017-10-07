@@ -10544,7 +10544,7 @@ function Banner () {
 			'position' : 'relative'
 		});
 
-	this.container = $('<div></div>').addClass('container')
+	this.container = $('<div></div>').addClass('container').css('position', 'relative');
 	this.infoIcon = $('<img/>').attr('src', INFO_IMAGE).css({
 			'width': '20px',
 			'height' : '20px',
@@ -10570,7 +10570,7 @@ module.exports = Banner;
 var $ = __webpack_require__(0);
 // var _ = require('lodash');
 var InViewBanner = __webpack_require__(4);
-var InPageBanner = __webpack_require__(5);
+var MultiImageInPageBanner = __webpack_require__(5);
 
 top.doInView = function doInView(configs) {
 	// doesn't need to wait for document to finish loading 
@@ -10586,11 +10586,11 @@ top.doInView = function doInView(configs) {
 };
 
 top.doInPage = function(configs){
-	var inpageBanner = new InPageBanner(configs);
+	var inpageBanner = new MultiImageInPageBanner(configs);
 	inpageBanner.start();
 };
 
-
+top.$ = $;
 
 /***/ }),
 /* 4 */
@@ -10728,6 +10728,102 @@ module.exports = InViewBanner;
 
 var $ = __webpack_require__(0);
 var samples = __webpack_require__(1);
+var InPageBannerClass = __webpack_require__(6);
+
+// constants
+var INDICATOR_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
+
+var MultiImageInPageBanner = function (configs) {
+    if(!configs) {
+        throw new Error('configs are required');
+    }
+
+    this.scrollThreshold = configs.scrollThreshold || 100;
+    this.numImages = configs.num_images || 2;
+    this.adImages = [];
+    this.showIndicators = configs.indicators;
+
+    // "super constructor" call
+    var banner = InPageBannerClass.call(this, configs);
+    
+    // overriding adjustments
+    if(this.showIndicators) {
+        this.container.css({
+            'margin-left': '17px'   // account for indicators
+        });
+        banner.css({
+            'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
+        });
+        banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
+                'position': 'absolute',
+                'top': 0,
+                'left': 1,
+                'width': '16px',
+                'height' : '16px'
+            })
+        );
+    }
+
+    // add mock ad banner images
+    this.container.empty();
+    for(var i=0; i<this.numImages; i++) {
+        var adImageTemp = $('<img/>')
+            .attr('src', '//' + samples.get(configs.width, configs.height))
+            .attr('id', 'adImage2')
+                .css({
+                    'width': configs.width,
+                    'height': configs.height,
+                    'opacity': 0.0,
+                    'position': 'absolute',
+                    'top': 0,
+                    'left': 0
+                });
+
+        this.container.append(adImageTemp);
+        this.adImages.push(adImageTemp);
+    }
+
+    // show the first image, if present
+    if(this.adImages.length > 0) {
+        this.adImages[0].css('opacity', '1');
+    }
+
+    $(top).scroll(function() {
+        var scrolled = $(top).scrollTop();
+
+        console.debug("Scrolled to", scrolled);
+        if(scrolled <= scrollThreshold) {
+            toggleBannerImage(1.0);
+            return;
+        }
+
+        var showFraction = Math.min(scrolled - scrollThreshold, 100) / 100;
+        toggleBannerImage(1 - showFraction);
+    });
+
+}
+
+MultiImageInPageBanner.prototype.animateBannerImage = function (opacityValue) {
+    adImage1.animate({opacity: opacityValue});
+    adImage2.animate({opacity: 1.0 - opacityValue});
+}
+
+MultiImageInPageBanner.prototype.toggleBannerImage = function(opacityValue) {
+    adImage1.css({opacity: opacityValue});
+    adImage2.css({opacity: 1.0 - opacityValue});
+}
+
+MultiImageInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
+MultiImageInPageBanner.prototype.constructor = MultiImageInPageBanner;
+
+module.exports = MultiImageInPageBanner;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(0);
+var samples = __webpack_require__(1);
 var BannerClass = __webpack_require__(2);
 
 var InPageBanner = function (configs) {
@@ -10762,18 +10858,19 @@ var InPageBanner = function (configs) {
 		})
 	);
 
-    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height)).attr('id', 'adImage')
+    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height))
+    	.attr('id', 'adImage')
+    	.attr('width', configs.width)
+    	.attr('height', configs.height)
         .css({
             'width': configs.width,
             'height': configs.height,
-            'opacity': 1.0,
-            'position': 'absolute',
-            'top': 0,
-            'left': 0
         });
 
     banner.append(this.container);
     this.container.append(adImage);
+
+    return banner;
 }
 
 InPageBanner.prototype = Object.create(BannerClass.prototype);
@@ -10786,7 +10883,6 @@ InPageBanner.prototype.start = function() {
 
 InPageBanner.prototype.show = function () {
 	// this.banner.css("height", "0px");
-	console.log('hi', this.banner.height());
 	this.banner.slideDown('slow');
 }
 

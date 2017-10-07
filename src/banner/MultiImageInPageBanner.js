@@ -9,42 +9,57 @@ var MultiImageInPageBanner = function (configs) {
     if(!configs) {
         throw new Error('configs are required');
     }
-    this.scrollThreshold = configs.scrollThreshold || 100
+
+    this.scrollThreshold = configs.scrollThreshold || 100;
+    this.numImages = configs.num_images || 2;
+    this.adImages = [];
+    this.showIndicators = configs.indicators;
 
     // "super constructor" call
     var banner = InPageBannerClass.call(this, configs);
     
     // overriding adjustments
-    banner.css({
-        'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
-    });
-    this.container.css({
-        'margin-left': '17px'   // account for indicators
-    });
-
-
-
-    banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
-            'position': 'absolute',
-            'bottom': 0,
-            'left': 1,
-            'width': '16px',
-            'height' : '16px'
-        })
-    );
-/*
-    var imageUrl2 = samples.get(configs.width, configs.height);
-    var adImage2 = $('<img/>').attr('src', '//' + imageUrl2).attr('id', 'adImage2')
-        .css({
-            'width': configs.width,
-            'height': configs.height,
-            'opacity': 0.0,
-            'position': 'absolute',
-            'top': 0,
-            'left': 0
+    if(this.showIndicators) {
+        this.container.css({
+            'margin-left': '17px'   // account for indicators
         });
-    this.container.append(adImage2);
-*/
+        banner.css({
+            'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
+        });
+        banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
+                'position': 'absolute',
+                'top': 0,
+                'left': 1,
+                'width': '16px',
+                'height' : '16px'
+            })
+        );
+    }
+
+    // add mock ad banner images
+    this.container.empty();
+    for(var i=0; i<this.numImages; i++) {
+        var adImageTemp = $('<img/>')
+            .attr('src', '//' + samples.get(configs.width, configs.height))
+            .attr('id', 'adImage2')
+                .css({
+                    'width': configs.width,
+                    'height': configs.height,
+                    'opacity': 0.0,
+                    'position': 'absolute',
+                    'top': 0,
+                    'left': 0
+                });
+
+        this.container.append(adImageTemp);
+        this.adImages.push(adImageTemp);
+    }
+
+    // show the first image, if present
+    if(this.adImages.length > 0) {
+        this.adImages[0].css('opacity', '1');
+    }
+
     $(top).scroll(function() {
         var scrolled = $(top).scrollTop();
 
@@ -57,6 +72,7 @@ var MultiImageInPageBanner = function (configs) {
         var showFraction = Math.min(scrolled - scrollThreshold, 100) / 100;
         toggleBannerImage(1 - showFraction);
     });
+
 }
 
 MultiImageInPageBanner.prototype.animateBannerImage = function (opacityValue) {
@@ -68,19 +84,6 @@ MultiImageInPageBanner.prototype.toggleBannerImage = function(opacityValue) {
     adImage1.css({opacity: opacityValue});
     adImage2.css({opacity: 1.0 - opacityValue});
 }
-
-MultiImageInPageBanner.prototype.start = function() {
-    var t = false;
-    this.attachTarget.after($('<button></button>')
-        .css('margin', '5px')
-        .html('Fully Toggle Ad Images via Fading Effect')
-        .click(function(){
-            animateBannerImage(t? 1.0 : 0);
-            t = !t;
-        })) ;
-
-    this.attachTarget.after(this.banner);
-};
 
 MultiImageInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
 MultiImageInPageBanner.prototype.constructor = MultiImageInPageBanner;
