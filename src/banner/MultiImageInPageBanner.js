@@ -104,7 +104,13 @@ MultiImageInPageBanner.prototype.showBannerImage = function (index, opacityValue
             'visibility' :'visible',
             // 'opacity':1
         });
-        this.adImages[this.imageIndex].animate({'opacity': 1});
+
+        if(opacityValue) {
+            this.adImages[this.imageIndex].css({'opacity': opacityValue});
+        } else {
+            this.adImages[this.imageIndex].animate({'opacity': 1});
+        }
+
         this.indicator.css('top', (this.imageIndex*16)+'px');   // indicator position
     }
 }
