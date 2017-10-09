@@ -10797,14 +10797,17 @@ var MultiImageInPageBanner = function (configs) {
         this.imageIndex = 0;
     }
 
-    // do scale transformation
+    // do scale transformation - math needs is just approximate right now
     if(configs.scale) {
-        var scale = this.attachTarget.width() / configs.width;
+        var scale = (this.attachTarget.width() - 17 - 20) / configs.width;
         banner.css({
-            'width': configs.width * scale,
+            'width': configs.width * scale + 17 + 20,
             'height': configs.height * scale
         });
+
         this.container.css('transform', 'scale('+scale+')');
+        this.container.css('margin-left', scale/2 + 17 + 'px');
+        this.container.find('.adImage').css('left', ((scale - 1) * configs.width)/2 + 'px');
     }
 
     // bind to scroll handler

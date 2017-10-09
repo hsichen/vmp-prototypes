@@ -9,7 +9,7 @@
 			selector: '#bannerLocation',
 			width: 728,
 			height: 90,
-			scale: false,
+			scale: true,
 			indicators: true,
 			num_images: 5,
 			transition_effect: 'fade',	// or 'slide', 'none', etc
@@ -20,8 +20,9 @@
 <body onload="doInPage(configs)">
 <p id="desc" style="height:350px">Simple test page for bundled scripts.</p>
 <div id="bannerLocation" style="margin: 10px; padding: 20px; border: 1px solid green">
-	<b>InPage Banner goes below this placeholder element</b>
-	<button onclick="toggle()">next banner</button>
+	<b>InPage Banner goes below this placeholder element</b><br/>
+	This button allows you to manually cycle amongst banners without relying on scrolling (but you can too)
+	<button onclick="toggle()">Next banner</button>
 </div>
 <div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
 </body>
