@@ -19,6 +19,7 @@ top.doInView = function doInView(configs) {
 top.doInPage = function(configs){
 	var inpageBanner = new MultiImageInPageBanner(configs);
 	inpageBanner.start();
+	top.ghg = inpageBanner;
 };
 
 top.$ = $;

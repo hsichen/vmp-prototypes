@@ -10588,6 +10588,7 @@ top.doInView = function doInView(configs) {
 top.doInPage = function(configs){
 	var inpageBanner = new MultiImageInPageBanner(configs);
 	inpageBanner.start();
+	top.ghg = inpageBanner;
 };
 
 top.$ = $;
@@ -10739,7 +10740,6 @@ var MultiImageInPageBanner = function (configs) {
     }
 
     this.scrollThreshold = configs.scrollThreshold || 100;
-    this.numImages = configs.num_images || 2;
     this.adImages = [];
     this.showIndicators = configs.indicators;
 
@@ -10754,19 +10754,19 @@ var MultiImageInPageBanner = function (configs) {
         banner.css({
             'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
         });
-        banner.append($('<img/>').attr('src', INDICATOR_IMAGE).css({
-                'position': 'absolute',
-                'top': 0,
-                'left': 1,
-                'width': '16px',
-                'height' : '16px'
-            })
-        );
+        this.indicator = $('<img/>').attr('src', INDICATOR_IMAGE).css({
+            'position': 'absolute',
+            'top': 0,
+            'left': 1,
+            'width': '16px',
+            'height' : '16px'
+        });
+        banner.append(this.indicator);
     }
 
     // add mock ad banner images
     this.container.empty();
-    for(var i=0; i<this.numImages; i++) {
+    for(var i=0; i< (configs.num_images || 2); i++) {
         var adImageTemp = $('<img/>')
             .attr('src', '//' + samples.get(configs.width, configs.height))
             .attr('id', 'adImage2')
@@ -10774,6 +10774,7 @@ var MultiImageInPageBanner = function (configs) {
                     'width': configs.width,
                     'height': configs.height,
                     'opacity': 0.0,
+                    'visibility': 'hidden',
                     'position': 'absolute',
                     'top': 0,
                     'left': 0
@@ -10785,7 +10786,11 @@ var MultiImageInPageBanner = function (configs) {
 
     // show the first image, if present
     if(this.adImages.length > 0) {
-        this.adImages[0].css('opacity', '1');
+        this.adImages[0].css({
+            'opacity': '1',
+            'visibility': 'visible'
+        });
+        this.imageIndex = 0;
     }
 
     $(top).scroll(function() {
@@ -10803,18 +10808,35 @@ var MultiImageInPageBanner = function (configs) {
 
 }
 
-MultiImageInPageBanner.prototype.animateBannerImage = function (opacityValue) {
-    adImage1.animate({opacity: opacityValue});
-    adImage2.animate({opacity: 1.0 - opacityValue});
-}
+MultiImageInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
+MultiImageInPageBanner.prototype.constructor = MultiImageInPageBanner;
 
 MultiImageInPageBanner.prototype.toggleBannerImage = function(opacityValue) {
     adImage1.css({opacity: opacityValue});
     adImage2.css({opacity: 1.0 - opacityValue});
 }
 
-MultiImageInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
-MultiImageInPageBanner.prototype.constructor = MultiImageInPageBanner;
+MultiImageInPageBanner.prototype.showBannerImage = function (index, opacityValue) {
+    if(this.adImages.length > 0) {
+        if(this.imageIndex == index) {
+            return; // already showing, don't do anything
+        }
+
+        this.adImages[this.imageIndex].css({
+            'visibility' :'hidden',
+            'opacity':0
+        });
+
+        // convert to new index
+        this.imageIndex = (index <= this.adImages.length) ? index : this.adImages.length-1;
+        this.adImages[this.imageIndex].css({
+            'visibility' :'visible',
+            // 'opacity':1
+        });
+        this.adImages[this.imageIndex].animate({'opacity': 1});
+        this.indicator.css('top', (this.imageIndex*16)+'px');   // indicator position
+    }
+}
 
 module.exports = MultiImageInPageBanner;
 
