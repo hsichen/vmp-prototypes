@@ -10568,13 +10568,10 @@ module.exports = Banner;
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
-// var _ = require('lodash');
 var InViewBanner = __webpack_require__(4);
 var MultiImageInPageBanner = __webpack_require__(5);
 
 top.doInView = function doInView(configs) {
-	// doesn't need to wait for document to finish loading 
-	//  - but that decision is left up to the bootstrap html
 	var inviewBanner = new InViewBanner(configs);
 	inviewBanner.start();
 
@@ -10605,125 +10602,81 @@ var $ = __webpack_require__(0);
 var samples = __webpack_require__(1);
 var BannerClass = __webpack_require__(2);
 
-// local vars
-var openHandle;
-var windowWidth;
-var windowHeight;
-var scrollThreshold;	
-
-var InViewBanner = function(configs){
+var InViewBanner = function (configs) {
 	if(!configs) {
 		throw new Error('configs are required');
 	}
 
 	// "super constructor" call
 	var banner = BannerClass.call(this);
-
-	var self = this;
 	var imageUrl = samples.get(configs.width, configs.height);
-	windowWidth = $(top).width();
-	windowHeight = $(top).height();
-	scrollThreshold = configs.scrollThreshold || 100;
-	var initialPositionFraction = configs.initialPosition || 0.5;	// percentage of top-portion of banner in view
 
-	banner.css({
-			'width': configs.width,
-			'height': configs.height + 16,	// acounts for icons
-			'position': "fixed",
-			'top': (windowHeight - (initialPositionFraction * configs.height)) + "px",
-			'left': ((windowWidth - configs.width) / 2 ) + "px"
+	this.anchorContainer = $('<div></div>')
+		.attr('id', 'inviewAnchor')
+		.css({
+			'margin-left': '-10px',
+			'margin-right': '-10px',
+			'position': 'fixed',
+			'bottom': '0px',
+			'width': '100%',
+			'overflow': 'visible'
 		});
 
-
-	banner.append(this.closeIcon.css('float', 'right').click(
-		function() {
-			self.hide();
-		})
-	);
-	banner.append(this.infoIcon.css('float', 'right'));
-	banner.append(this.container);
-	this.container.append($('<img/>').attr('src', '//' + imageUrl).attr('id', 'adImage'));
-
-	// scroll listener
-	$(top).scroll(function showByScrollFractionAndThreshold() {
-		var scrollTop = $(top).scrollTop();
-
-		if(scrollTop <= scrollThreshold) {
-			return;
-		}
-
-		var scrollDiff = (scrollTop - scrollThreshold);
-		var revealAmount = (initialPositionFraction * configs.height + scrollDiff);
-
-		banner.css({top: (windowHeight - Math.min(revealAmount, configs.height + 16)) + "px"});
-
-		if(revealAmount >= (configs.height + 16)) {
-			setTimeout(function(){
-				self.hide();
-			}, 2000);
-		}
+	// construct and modify the banner styles
+	this.endTopValue = -1 * (configs.height + 20);
+	this.banner.css({
+		'width': configs.width,
+		'height': configs.height + 20 + 'px',
+		'position': 'absolute',
+		'top': this.endTopValue + 'px',
+		'left': ($(top).width() - configs.width)/2 + 'px'
 	});
-
-	openHandle = $('<div></div>')
+	this.container.css({
+		'margin-top': '20px'
+	});
+	this.closeIcon.css({
+		'position':'absolute',
+		'right': '0px',
+		'top': '0px'
+	}).click(this.hide.bind(this));
+	this.infoIcon.css({
+		'position':'absolute',
+		'right': '18px',
+		'top': '0px'
+	});
+	this.banner.append(this.closeIcon);
+	this.banner.append(this.infoIcon);	
+	this.banner.append(this.container);
+	this.container.append($('<img/>').attr('width', configs.width).attr('height', configs.height)
+		.attr('src', '//' + imageUrl)
 		.css({
-			'background-color': 'cyan',
-			'border': '1px solid gray',
-			'border-radius': '5px',
 			'width': configs.width,
-			'height': '40px',
-			'z-index' : 500,
-			'padding': 0,
-			'position': "fixed",
-			'top': (windowHeight - 40) + "px",
-			'left': ((windowWidth - configs.width) / 2 ) + "px",
-			'cursor': 'pointer',
-			'overflow': 'hidden'
-		})
-		.html('Click to open InView Banner')
-		.hide();
-
-	openHandle.click(function(e){
-		banner.css('top', windowHeight);
-		banner.animate({top:(windowHeight - banner.height()) + "px"},
-			function(){
-				openHandle.fadeOut(500);
-			});
-	});
-}
-
-// TODO: convert to instance
-function isAttached() {
-	return this.banner && $.contains(top.document, this.banner[0]);
-}
-
-function isInFullView() {
-	return windowHeight - this.banner.css('top') >= this.banner.height();
-}
+			'height': configs.height
+		}));
+	
+	$(top.document.body).append(this.anchorContainer);
+};
 
 InViewBanner.prototype = Object.create(BannerClass.prototype);
 InViewBanner.prototype.constructor = InViewBanner;
 
+InViewBanner.prototype.show = function () {
+	this.banner.css('top', '0px');
+	this.banner.animate({
+		'top': this.endTopValue
+	}, 'slow');
+}
+
 InViewBanner.prototype.hide = function () {
-	this.banner.animate({top: windowHeight+1},
-		function(){
-			openHandle.fadeIn(500);
-		});
-};
+	this.banner.animate({
+		'top': '0px'
+	}, 'slow');
+}
 
 InViewBanner.prototype.start = function () {
-	if(!isAttached()) {
-		$(top.document.body).append(this.banner);
-		$(top.document.body).append(openHandle);
-	}
-}
-
-InViewBanner.prototype.refresh = function () {
-	var b = this.banner;
-	b.animate({top: windowHeight+1}, function(){
-		b.find('#adImage').attr('src', '//' + samples.get(b.width(), b.height()-16));
-		b.animate({top: windowHeight - b.height()});
-	});
-}
+	this.anchorContainer.append(this.banner);
+	this.show();	
+};
 
 module.exports = InViewBanner;
 
