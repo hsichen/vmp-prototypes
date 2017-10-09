@@ -10,7 +10,7 @@ var MultiImageInPageBanner = function (configs) {
         throw new Error('configs are required');
     }
 
-    this.scrollThreshold = configs.scrollThreshold || 100;
+    this.scrollThreshold = configs.scroll_threshold || 100;
     this.adImages = [];
     this.showIndicators = configs.indicators;
 
@@ -40,16 +40,16 @@ var MultiImageInPageBanner = function (configs) {
     for(var i=0; i< (configs.num_images || 2); i++) {
         var adImageTemp = $('<img/>')
             .attr('src', '//' + samples.get(configs.width, configs.height))
-            .attr('id', 'adImage2')
-                .css({
-                    'width': configs.width,
-                    'height': configs.height,
-                    'opacity': 0.0,
-                    'visibility': 'hidden',
-                    'position': 'absolute',
-                    'top': 0,
-                    'left': 0
-                });
+            .addClass('adImage')
+            .css({
+                'width': configs.width,
+                'height': configs.height,
+                'opacity': 0.0,
+                'visibility': 'hidden',
+                'position': 'absolute',
+                'top': 0,
+                'left': 'auto'
+            });
 
         this.container.append(adImageTemp);
         this.adImages.push(adImageTemp);
@@ -64,45 +64,34 @@ var MultiImageInPageBanner = function (configs) {
         this.imageIndex = 0;
     }
 
-    $(top).scroll(function() {
-        var scrolled = $(top).scrollTop();
+    // do scale transformation
+    if(configs.scale) {
+        var scale = this.attachTarget.width() / configs.width;
+        banner.css({
+            'width': configs.width * scale,
+            'height': configs.height * scale
+        });
+        this.container.css('transform', 'scale('+scale+')');
+    }
 
-        console.debug("Scrolled to", scrolled);
-        if(scrolled <= scrollThreshold) {
-            toggleBannerImage(1.0);
-            return;
-        }
-
-        var showFraction = Math.min(scrolled - scrollThreshold, 100) / 100;
-        toggleBannerImage(1 - showFraction);
-    });
-
+    // bind to scroll handler
+    $(top).scroll(this.handleScroll.bind(this));
 }
 
 MultiImageInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
 MultiImageInPageBanner.prototype.constructor = MultiImageInPageBanner;
 
-MultiImageInPageBanner.prototype.toggleBannerImage = function(opacityValue) {
-    adImage1.css({opacity: opacityValue});
-    adImage2.css({opacity: 1.0 - opacityValue});
-}
-
 MultiImageInPageBanner.prototype.showBannerImage = function (index, opacityValue) {
     if(this.adImages.length > 0) {
-        if(this.imageIndex == index) {
-            return; // already showing, don't do anything
-        }
-
         this.adImages[this.imageIndex].css({
             'visibility' :'hidden',
             'opacity':0
         });
 
-        // convert to new index
-        this.imageIndex = (index <= this.adImages.length) ? index : this.adImages.length-1;
+        // convert to new index - cap at max
+        this.imageIndex = (index < this.adImages.length) ? index : this.adImages.length-1;
         this.adImages[this.imageIndex].css({
-            'visibility' :'visible',
-            // 'opacity':1
+            'visibility' :'visible'
         });
 
         if(opacityValue) {
@@ -113,6 +102,23 @@ MultiImageInPageBanner.prototype.showBannerImage = function (index, opacityValue
 
         this.indicator.css('top', (this.imageIndex*16)+'px');   // indicator position
     }
+}
+
+MultiImageInPageBanner.prototype.handleScroll = function() {
+    var scrolled = $(top).scrollTop();
+    var index, oFraction;
+
+    if(scrolled <= this.scrollThreshold) {
+        this.showBannerImage(0, 1);    // initial
+        return;
+    }
+    console.log("Scrolled beyond threshold to", scrolled);
+
+    index = Math.floor((scrolled - this.scrollThreshold) / 100);
+    oFraction = ((scrolled - this.scrollThreshold) % 100) / 100;
+    console.log("Setting to index and opacity of", index, oFraction);
+
+    this.showBannerImage(index, oFraction);
 }
 
 module.exports = MultiImageInPageBanner;

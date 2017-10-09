@@ -19,7 +19,10 @@ top.doInView = function doInView(configs) {
 top.doInPage = function(configs){
 	var inpageBanner = new MultiImageInPageBanner(configs);
 	inpageBanner.start();
-	top.ghg = inpageBanner;
-};
 
-top.$ = $;
+	var i = 0;
+	top.toggle = function() {
+		i = (i+1) % configs.num_images;
+		inpageBanner.showBannerImage(i);
+	};
+};
