@@ -112,7 +112,7 @@ InViewBanner.prototype.show = function () {
 	}, 'slow', function(){
 		handle.hide();
 	});
-}
+};
 
 InViewBanner.prototype.hide = function () {
 	var handle = this.openHandle;
@@ -121,7 +121,7 @@ InViewBanner.prototype.hide = function () {
 	}, 'slow', function(){
 		handle.show();
     });
-}
+};
 
 InViewBanner.prototype.start = function () {
 	this.show();	
