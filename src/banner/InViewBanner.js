@@ -121,6 +121,8 @@ InViewBanner.prototype.hide = function () {
 	}, 'slow', function(){
 		handle.show();
     });
+
+    this.banner.hide();
 };
 
 InViewBanner.prototype.start = function () {
