@@ -10568,11 +10568,11 @@ module.exports = Banner;
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
-var InViewBanner = __webpack_require__(4);
-var MultiImageInPageBanner = __webpack_require__(5);
+var ScrollDecoratedInViewBanner = __webpack_require__(4);
+var MultiImageInPageBanner = __webpack_require__(6);
 
 top.doInView = function doInView(configs) {
-	var inviewBanner = new InViewBanner(configs);
+	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
 	inviewBanner.start();
 
 	$('#bannerRefresh').click(
@@ -10596,6 +10596,30 @@ top.doInPage = function(configs){
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(0);
+var InViewBannerClass = __webpack_require__(5);
+
+var ScrollDecoratedInViewBanner = function(configs) {
+	if(!configs) {
+		throw new Error('configs are required');
+	}
+
+	// "super constructor" call
+	InViewBannerClass.call(this, configs);
+
+	var scrollThreshold = configs.scrollThreshold || 100;
+	var initialPositionFraction = configs.initialPosition || 0.5;
+};
+
+ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototype);
+ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
+
+module.exports = ScrollDecoratedInViewBanner;
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
@@ -10730,12 +10754,12 @@ InViewBanner.prototype.start = function () {
 module.exports = InViewBanner;
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
 var samples = __webpack_require__(1);
-var InPageBannerClass = __webpack_require__(6);
+var InPageBannerClass = __webpack_require__(7);
 
 // constants
 var INDICATOR_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
@@ -10862,7 +10886,7 @@ MultiImageInPageBanner.prototype.handleScroll = function() {
 module.exports = MultiImageInPageBanner;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);

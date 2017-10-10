@@ -1,9 +1,9 @@
 var $ = require('jquery');
-var InViewBanner = require('./banner/InViewBanner.js');
+var ScrollDecoratedInViewBanner = require('./banner/ScrollDecoratedInViewBanner.js');
 var MultiImageInPageBanner = require('./banner/MultiImageInPageBanner.js');
 
 top.doInView = function doInView(configs) {
-	var inviewBanner = new InViewBanner(configs);
+	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
 	inviewBanner.start();
 
 	$('#bannerRefresh').click(
