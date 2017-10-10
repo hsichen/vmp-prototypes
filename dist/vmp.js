@@ -10676,6 +10676,7 @@ var InViewBanner = function (configs) {
 
 	if(configs.reopenable) {
 		this.openHandle = $('<div></div>')
+			.attr('id', 'inviewOpenHandle')
 			.css({
 				'text-align': 'center',
 				'background-color': 'cyan',
@@ -10691,6 +10692,7 @@ var InViewBanner = function (configs) {
 				'cursor': 'pointer',
 				'overflow': 'hidden'
 			})
+			.click(this.show.bind(this))
 			.html('Click to open InView Banner')
 			.hide();
 
@@ -10704,15 +10706,21 @@ InViewBanner.prototype = Object.create(BannerClass.prototype);
 InViewBanner.prototype.constructor = InViewBanner;
 
 InViewBanner.prototype.show = function () {
+    var handle = this.openHandle;
 	this.banner.animate({
 		'top': this.endTopValue
-	}, 'slow');
+	}, 'slow', function(){
+		handle.hide();
+	});
 }
 
 InViewBanner.prototype.hide = function () {
+	var handle = this.openHandle;
 	this.banner.animate({
 		'top': '0px'
-	}, 'slow');
+	}, 'slow', function(){
+		handle.show();
+    });
 }
 
 InViewBanner.prototype.start = function () {
