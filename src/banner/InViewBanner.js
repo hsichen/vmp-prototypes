@@ -32,7 +32,9 @@ var InViewBanner = function (configs) {
 		'left': ($(top).width() - configs.width)/2 + 'px'
 	});
 	this.container.css({
-		'margin-top': '20px'
+		// 'margin-top': '20px',
+		'position': 'absolute',
+		'top': '20px'
 	});
 	this.closeIcon.css({
 		'position':'absolute',
@@ -47,13 +49,31 @@ var InViewBanner = function (configs) {
 	this.banner.append(this.closeIcon);
 	this.banner.append(this.infoIcon);	
 	this.banner.append(this.container);
-	this.container.append($('<img/>').attr('width', configs.width).attr('height', configs.height)
+	this.container.append($('<img/>')
+		.attr('width', configs.width)
+		.attr('height', configs.height)
 		.attr('src', '//' + imageUrl)
 		.css({
 			'width': configs.width,
-			'height': configs.height
+			'height': configs.height,
+			'position': 'absolute',
+			'top': '0px',
+			'left': '0px'
 		}));
 	
+	if(configs.scale) {
+		var scaleFactor = $(top).width() / configs.width;
+		
+		this.banner.css({
+			'width': configs.width * scaleFactor,
+			'height': configs.height * scaleFactor,
+			'left': '0px'
+		});
+		this.container.css('transform', 'scale('+scaleFactor+')');
+		this.endTopValue = -1 * (configs.height * scaleFactor + 20);
+	}
+
+
 	$(top.document.body).append(this.anchorContainer);
 };
 
