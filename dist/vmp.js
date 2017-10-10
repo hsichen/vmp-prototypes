@@ -10621,14 +10621,15 @@ var InViewBanner = function (configs) {
 			'width': '100%',
 			'overflow': 'visible'
 		});
+	this.anchorContainer.append(banner);
 
 	// construct and modify the banner styles
 	this.endTopValue = -1 * (configs.height + 20);
-	this.banner.css({
+	banner.css({
 		'width': configs.width,
 		'height': configs.height + 20 + 'px',
 		'position': 'absolute',
-		'top': this.endTopValue + 'px',
+		'top': '0px',
 		'left': ($(top).width() - configs.width)/2 + 'px'
 	});
 	this.container.css({
@@ -10646,9 +10647,9 @@ var InViewBanner = function (configs) {
 		'right': '18px',
 		'top': '0px'
 	});
-	this.banner.append(this.closeIcon);
-	this.banner.append(this.infoIcon);	
-	this.banner.append(this.container);
+	banner.append(this.closeIcon);
+	banner.append(this.infoIcon);	
+	banner.append(this.container);
 	this.container.append($('<img/>')
 		.attr('width', configs.width)
 		.attr('height', configs.height)
@@ -10664,7 +10665,7 @@ var InViewBanner = function (configs) {
 	if(configs.scale) {
 		var scaleFactor = $(top).width() / configs.width;
 		
-		this.banner.css({
+		banner.css({
 			'width': configs.width * scaleFactor,
 			'height': configs.height * scaleFactor,
 			'left': '0px'
@@ -10673,6 +10674,28 @@ var InViewBanner = function (configs) {
 		this.endTopValue = -1 * (configs.height * scaleFactor + 20);
 	}
 
+	if(configs.reopenable) {
+		this.openHandle = $('<div></div>')
+			.css({
+				'text-align': 'center',
+				'background-color': 'cyan',
+				'border': '1px solid gray',
+				'border-radius': '5px',
+				'width': configs.width,
+				'height': '40px',
+				'z-index' : 500,
+				'padding': 0,
+				'position': "absolute",
+				'top': "-40px",
+				'left': ($(top).width() - configs.width)/2 + 'px',
+				'cursor': 'pointer',
+				'overflow': 'hidden'
+			})
+			.html('Click to open InView Banner')
+			.hide();
+
+		this.anchorContainer.append(this.openHandle);
+	}
 
 	$(top.document.body).append(this.anchorContainer);
 };
@@ -10681,7 +10704,6 @@ InViewBanner.prototype = Object.create(BannerClass.prototype);
 InViewBanner.prototype.constructor = InViewBanner;
 
 InViewBanner.prototype.show = function () {
-	this.banner.css('top', '0px');
 	this.banner.animate({
 		'top': this.endTopValue
 	}, 'slow');
@@ -10694,7 +10716,6 @@ InViewBanner.prototype.hide = function () {
 }
 
 InViewBanner.prototype.start = function () {
-	this.anchorContainer.append(this.banner);
 	this.show();	
 };
 
