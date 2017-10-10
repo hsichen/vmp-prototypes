@@ -9,33 +9,30 @@ var ScrollDecoratedInViewBanner = function(configs) {
 	// "super constructor" call
 	InViewBannerClass.call(this, configs);
 
-	var banner = this.banner;
+	var self = this;
 	this.scrollThreshold = configs.scroll_threshold || 100;
 	this.initialPositionFraction = configs.initial_position || 0.5;
 	this.endTopValue = this.endTopValue * this.initialPositionFraction;
+	this.scrollDelayMillis = configs.scroll_delay_millis || 500;
 
 	// attaching scrolling stuff
-	var getTargetTopPosition = (function(self){
-		return function () {
-			var scrollTop = $(top).scrollTop();
+	var getTargetTopPosition = function () {
+		var scrollTop = $(top).scrollTop();
 
-			if(scrollTop <= self.scrollThreshold) {
-				return self.endTopValue;
-			}
-
-			var p = scrollTop - self.scrollThreshold - self.endTopValue;
-			var max = (-1*self.endTopValue) / self.initialPositionFraction;
-
-			return -1 * Math.min(p, max);
+		if(scrollTop <= self.scrollThreshold) {
+			return self.endTopValue;
 		}
-	})(this);
+
+		var p = scrollTop - self.scrollThreshold - self.endTopValue;
+		var max = (-1*self.endTopValue) / self.initialPositionFraction;
+
+		return -1 * Math.min(p, max);
+	};
 
 	$(top).scroll(function () {
 		var p = getTargetTopPosition();
-		
-		banner.css({
-			'top': p
-		});
+		console.log("scrolled to position:", p);
+		self.show(p);
 	});
 
 	
@@ -44,26 +41,15 @@ var ScrollDecoratedInViewBanner = function(configs) {
 ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototype);
 ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
-ScrollDecoratedInViewBanner.prototype.show = function () {
+ScrollDecoratedInViewBanner.prototype.show = function (pos) {
+	var targetPosition = pos || this.endTopValue;
     var handle = this.openHandle;
 	this.banner.show();
 	this.banner.animate({
-		'top': this.endTopValue
+		'top': targetPosition
 	}, 'slow', function(){
 		handle.hide();
 	});
-};
-
-ScrollDecoratedInViewBanner.prototype.showByDirectSet = function () {
-	var scrollTop = $(top).scrollTop();
-
-	if(scrollTop <= this.scrollThreshold) {
-		this.banner.css({
-			'top': this.endTopValue
-		});
-
-		return;
-	}
 };
 
 module.exports = ScrollDecoratedInViewBanner;
