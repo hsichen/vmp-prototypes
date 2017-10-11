@@ -14,6 +14,7 @@ var ScrollDecoratedInViewBanner = function(configs) {
 	this.initialPositionFraction = configs.initial_position || 0.5;
 	this.endTopValue = this.endTopValue * this.initialPositionFraction;
 	this.scrollDelayMillis = configs.scroll_delay_millis || 500;
+	this.autocloseDelayMillis = configs.autoclose_delay_millis || 2000;
 
 	// attaching scrolling stuff
 	var regulatedTimerCallback = (function(originalCallback){
@@ -38,17 +39,26 @@ ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototyp
 ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
 ScrollDecoratedInViewBanner.prototype.show = function () {
-	var targetPosition = this.getTargetTopPosition()|| this.endTopValue;
+	if(this.isHidden) {
+		console.log("The banner is currently hidden");
+		return;
+	}
+
+	var targetPosition = this.getTargetTopPosition() || this.endTopValue;
 	console.debug("scrolled to position:", targetPosition, "starting position is:", this.endTopValue);
 
-    var handle = this.openHandle;
+    var self = this;
 	this.banner.show();
 	// uncomment this line below for un-animated testing / debugging 
 	// this.banner.css('top', targetPosition);
 	this.banner.animate({
 		'top': targetPosition
 	}, 'slow', function(){
-		handle.hide();
+		self.openHandle.hide();
+
+		if(self.autocloseDelayMillis && Math.abs(targetPosition) >= self.banner.height()) {
+			top.setTimeout(self.hide.bind(self), self.autocloseDelayMillis);
+		}
 	});
 };
 

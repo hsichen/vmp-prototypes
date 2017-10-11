@@ -75,6 +75,7 @@ var InViewBanner = function (configs) {
 	}
 
 	if(configs.reopenable) {
+		var self = this;
 		this.openHandle = $('<div></div>')
 			.attr('id', 'inviewOpenHandle')
 			.css({
@@ -92,7 +93,12 @@ var InViewBanner = function (configs) {
 				'cursor': 'pointer',
 				'overflow': 'hidden'
 			})
-			.click(this.show.bind(this))
+			.click((function(){
+				return function() {
+					self.isHidden = false;
+					self.show();
+				}
+			})())
 			.html('Click to open InView Banner')
 			.hide();
 
@@ -121,6 +127,8 @@ InViewBanner.prototype.hide = function () {
 	}, 'slow', function(){
   		handle.show();
     });
+
+    this.isHidden = true;
 };
 
 InViewBanner.prototype.start = function () {

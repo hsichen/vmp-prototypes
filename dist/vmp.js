@@ -10609,6 +10609,7 @@ var ScrollDecoratedInViewBanner = function(configs) {
 	this.initialPositionFraction = configs.initial_position || 0.5;
 	this.endTopValue = this.endTopValue * this.initialPositionFraction;
 	this.scrollDelayMillis = configs.scroll_delay_millis || 500;
+	this.autocloseDelayMillis = configs.autoclose_delay_millis || 2000;
 
 	// attaching scrolling stuff
 	var regulatedTimerCallback = (function(originalCallback){
@@ -10633,17 +10634,26 @@ ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototyp
 ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
 ScrollDecoratedInViewBanner.prototype.show = function () {
-	var targetPosition = this.getTargetTopPosition()|| this.endTopValue;
+	if(this.isHidden) {
+		console.log("The banner is currently hidden");
+		return;
+	}
+
+	var targetPosition = this.getTargetTopPosition() || this.endTopValue;
 	console.debug("scrolled to position:", targetPosition, "starting position is:", this.endTopValue);
 
-    var handle = this.openHandle;
+    var self = this;
 	this.banner.show();
 	// uncomment this line below for un-animated testing / debugging 
 	// this.banner.css('top', targetPosition);
 	this.banner.animate({
 		'top': targetPosition
 	}, 'slow', function(){
-		handle.hide();
+		self.openHandle.hide();
+
+		if(self.autocloseDelayMillis && Math.abs(targetPosition) >= self.banner.height()) {
+			top.setTimeout(self.hide.bind(self), self.autocloseDelayMillis);
+		}
 	});
 };
 
@@ -10743,6 +10753,7 @@ var InViewBanner = function (configs) {
 	}
 
 	if(configs.reopenable) {
+		var self = this;
 		this.openHandle = $('<div></div>')
 			.attr('id', 'inviewOpenHandle')
 			.css({
@@ -10760,7 +10771,12 @@ var InViewBanner = function (configs) {
 				'cursor': 'pointer',
 				'overflow': 'hidden'
 			})
-			.click(this.show.bind(this))
+			.click((function(){
+				return function() {
+					self.isHidden = false;
+					self.show();
+				}
+			})())
 			.html('Click to open InView Banner')
 			.hide();
 
@@ -10789,6 +10805,8 @@ InViewBanner.prototype.hide = function () {
 	}, 'slow', function(){
   		handle.show();
     });
+
+    this.isHidden = true;
 };
 
 InViewBanner.prototype.start = function () {
