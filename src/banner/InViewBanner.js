@@ -119,10 +119,8 @@ InViewBanner.prototype.hide = function () {
 	this.banner.animate({
 		'top': '0px'
 	}, 'slow', function(){
-		handle.show();
+  		handle.show();
     });
-
-    this.banner.hide();
 };
 
 InViewBanner.prototype.start = function () {
