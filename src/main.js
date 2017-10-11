@@ -4,13 +4,8 @@ var MultiImageInPageBanner = require('./banner/MultiImageInPageBanner.js');
 
 top.doInView = function doInView(configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
-	inviewBanner.start();
 
-	$('#bannerRefresh').click(
-		function() {
-			inviewBanner.refresh();
-		}
-	);
+	inviewBanner.start();
 };
 
 top.doInPage = function(configs){

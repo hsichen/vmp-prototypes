@@ -10573,13 +10573,8 @@ var MultiImageInPageBanner = __webpack_require__(6);
 
 top.doInView = function doInView(configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
-	inviewBanner.start();
 
-	$('#bannerRefresh').click(
-		function() {
-			inviewBanner.refresh();
-		}
-	);
+	inviewBanner.start();
 };
 
 top.doInPage = function(configs){

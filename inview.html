@@ -10,14 +10,15 @@
 			height:250,
 			scale: true,
 			initial_position: 0.5,
-			scroll_threshold: 100,
-			reopenable: true
+			scroll_threshold: 200,
+			reopenable: true,
+			scroll_delay_millis: 500
 		};
 	</script>
 </head>
 <body onload="doInView(configs);">
 <p id="desc">Simple test page for bundled scripts.</p>
-<button id="bannerRefresh"><b>Pretend Banner Refresh</b></button>
+<!-- <button id="bannerRefresh"><b>Pretend Banner Refresh</b></button> -->
 <div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
 </body>
 </html>
