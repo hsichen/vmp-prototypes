@@ -16,19 +16,6 @@ var ScrollDecoratedInViewBanner = function(configs) {
 	this.scrollDelayMillis = configs.scroll_delay_millis || 500;
 
 	// attaching scrolling stuff
-	var getTargetTopPosition = function () {
-		var scrollTop = $(top).scrollTop();
-
-		if(scrollTop <= self.scrollThreshold) {
-			return self.endTopValue;
-		}
-
-		var p = scrollTop - self.scrollThreshold - self.endTopValue;
-		var max = (-1*self.endTopValue) / self.initialPositionFraction;
-
-		return -1 * Math.min(p, max);
-	};
-
 	var regulatedTimerCallback = (function(originalCallback){
 		var tid;
 
@@ -39,11 +26,8 @@ var ScrollDecoratedInViewBanner = function(configs) {
 			tid = top.setTimeout(originalCallback, self.scrollDelayMillis);
 		}
 	})(
-		// callback function to find pos value for animating banner to
 		function () {
-			var p = getTargetTopPosition();
-			console.log("scrolled to position:", p, "starting position is:", self.endTopValue);
-			self.show(p);
+			self.show();	// leaving function wrapper in case of further development closured vars
 		}
 	);
 
@@ -53,8 +37,10 @@ var ScrollDecoratedInViewBanner = function(configs) {
 ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototype);
 ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
-ScrollDecoratedInViewBanner.prototype.show = function (pos) {
-	var targetPosition = pos || this.endTopValue;
+ScrollDecoratedInViewBanner.prototype.show = function () {
+	var targetPosition = this.getTargetTopPosition()|| this.endTopValue;
+	console.debug("scrolled to position:", targetPosition, "starting position is:", this.endTopValue);
+
     var handle = this.openHandle;
 	this.banner.show();
 	// uncomment this line below for un-animated testing / debugging 
@@ -65,5 +51,18 @@ ScrollDecoratedInViewBanner.prototype.show = function (pos) {
 		handle.hide();
 	});
 };
+
+ScrollDecoratedInViewBanner.prototype.getTargetTopPosition = function () {
+	var scrollTop = $(top).scrollTop();
+
+	if(scrollTop <= this.scrollThreshold) {
+		return this.endTopValue;
+	}
+
+	var p = scrollTop - this.scrollThreshold - this.endTopValue;
+	var max = (-1 * this.endTopValue) / this.initialPositionFraction;
+
+	return -1 * Math.min(p, max);
+}; 
 
 module.exports = ScrollDecoratedInViewBanner;

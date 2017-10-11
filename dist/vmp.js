@@ -10609,62 +10609,61 @@ var ScrollDecoratedInViewBanner = function(configs) {
 	// "super constructor" call
 	InViewBannerClass.call(this, configs);
 
-	var banner = this.banner;
+	var self = this;
 	this.scrollThreshold = configs.scroll_threshold || 100;
 	this.initialPositionFraction = configs.initial_position || 0.5;
 	this.endTopValue = this.endTopValue * this.initialPositionFraction;
+	this.scrollDelayMillis = configs.scroll_delay_millis || 500;
 
 	// attaching scrolling stuff
-	var getTargetTopPosition = (function(self){
-		return function () {
-			var scrollTop = $(top).scrollTop();
+	var regulatedTimerCallback = (function(originalCallback){
+		var tid;
 
-			if(scrollTop <= self.scrollThreshold) {
-				return self.endTopValue;
+		return function() {
+			if(tid) {
+				top.clearTimeout(tid);	// reset timeout id
 			}
-
-			var p = scrollTop - self.scrollThreshold - self.endTopValue;
-			var max = (-1*self.endTopValue) / self.initialPositionFraction;
-
-			return -1 * Math.min(p, max);
+			tid = top.setTimeout(originalCallback, self.scrollDelayMillis);
 		}
-	})(this);
+	})(
+		function () {
+			self.show();	// leaving function wrapper in case of further development closured vars
+		}
+	);
 
-	$(top).scroll(function () {
-		var p = getTargetTopPosition();
-		
-		banner.css({
-			'top': p
-		});
-	});
-
-	
+	$(top).scroll(regulatedTimerCallback);
 };
 
 ScrollDecoratedInViewBanner.prototype = Object.create(InViewBannerClass.prototype);
 ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
 ScrollDecoratedInViewBanner.prototype.show = function () {
+	var targetPosition = this.getTargetTopPosition()|| this.endTopValue;
+	console.debug("scrolled to position:", targetPosition, "starting position is:", this.endTopValue);
+
     var handle = this.openHandle;
 	this.banner.show();
+	// uncomment this line below for un-animated testing / debugging 
+	// this.banner.css('top', targetPosition);
 	this.banner.animate({
-		'top': this.endTopValue
+		'top': targetPosition
 	}, 'slow', function(){
 		handle.hide();
 	});
 };
 
-ScrollDecoratedInViewBanner.prototype.showByDirectSet = function () {
+ScrollDecoratedInViewBanner.prototype.getTargetTopPosition = function () {
 	var scrollTop = $(top).scrollTop();
 
 	if(scrollTop <= this.scrollThreshold) {
-		this.banner.css({
-			'top': this.endTopValue
-		});
-
-		return;
+		return this.endTopValue;
 	}
-};
+
+	var p = scrollTop - this.scrollThreshold - this.endTopValue;
+	var max = (-1 * this.endTopValue) / this.initialPositionFraction;
+
+	return -1 * Math.min(p, max);
+}; 
 
 module.exports = ScrollDecoratedInViewBanner;
 
@@ -10793,10 +10792,8 @@ InViewBanner.prototype.hide = function () {
 	this.banner.animate({
 		'top': '0px'
 	}, 'slow', function(){
-		handle.show();
+  		handle.show();
     });
-
-    this.banner.hide();
 };
 
 InViewBanner.prototype.start = function () {
