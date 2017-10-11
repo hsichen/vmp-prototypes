@@ -10635,7 +10635,7 @@ ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
 ScrollDecoratedInViewBanner.prototype.show = function () {
 	if(this.isHidden) {
-		console.log("The banner is currently hidden");
+		console.debug("The banner is currently hidden");
 		return;
 	}
 
@@ -10824,7 +10824,8 @@ var samples = __webpack_require__(1);
 var InPageBannerClass = __webpack_require__(7);
 
 // constants
-var INDICATOR_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
+var INDICATOR_ACTIVE_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
+var INDICATOR_PLACEHOLDER_IMAGE = "data:image/gif;base64,R0lGODlhEAAQANU9AP///yg0P9HZ4VNeae7x9oOQnKSor1NgaUxWYXeDkN7f3/T3+N3l7bS+yNfg6HR+ieLn66mwtquxt3N9h3iDjtHZ4+Dn7ZujrKissL7FzNLb5XB7h5Ccqf39/KCnri45RLrE0e/v7ri8v9PY37/GzS87Rp2su3eDjmx5hEJNV2Ztd+Pn64iVoba8wd3j6MXN1oCNmdzh5GNsdigzPnJ9idPV2LnCydrd4lBdZ0VPWZagqYOPmU1WYP///wAAAAAAACH5BAEAAD0ALAAAAAAQABAAAAaywJ5wyCoUWMOk0NiDAQCwHjO5yxASCYsFS8johjgSYbEAdDoAMoF0EB4IplEIUqlAQiMToe1WKEAnHx8nIH58FDQoNTYcOU88HDY1KDQUG08iLwNPTwMvIk8bDw4OGC6bnAMuGKQPJTMIBi0GqAOyBggzJUIIAhcxtLYxFwIIQwECKwIeNxISNx7JAgFCARECDdgMDNnZEdTVEwIpMtsyKQIT4MfUKhoaKj0B60ry8/RCQQA7";
 
 var MultiImageInPageBanner = function (configs) {
     if(!configs) {
@@ -10846,8 +10847,9 @@ var MultiImageInPageBanner = function (configs) {
         banner.css({
             'width': (configs.width + 17 + 20) + 'px'    // account for indicators and icons
         });
-        this.indicator = $('<img/>').attr('src', INDICATOR_IMAGE).css({
+        this.indicator = $('<img/>').attr('src', INDICATOR_ACTIVE_IMAGE).css({
             'position': 'absolute',
+            'z-index': 500,
             'top': 0,
             'left': 1,
             'width': '16px',
@@ -10873,6 +10875,16 @@ var MultiImageInPageBanner = function (configs) {
             });
 
         this.container.append(adImageTemp);
+        banner.append(
+            $('<img/>').attr('src', INDICATOR_PLACEHOLDER_IMAGE).css({
+                'position': 'absolute',
+                'z-index': 100,
+                'top': (i * 16),
+                'left': 1,
+                'width': '16px',
+                'height' : '16px'
+            })
+        );
         this.adImages.push(adImageTemp);
     }
 
