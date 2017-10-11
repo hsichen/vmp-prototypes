@@ -40,7 +40,7 @@ ScrollDecoratedInViewBanner.prototype.constructor = ScrollDecoratedInViewBanner;
 
 ScrollDecoratedInViewBanner.prototype.show = function () {
 	if(this.isHidden) {
-		console.log("The banner is currently hidden");
+		console.debug("The banner is currently hidden");
 		return;
 	}
 
