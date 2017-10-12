@@ -122,6 +122,8 @@ InViewBanner.prototype.show = function (callback) {
 	this.banner.animate({
 		'top': this.endTopValue
 	}, 'slow', callback || hideHandleCallback);
+
+	this.isHidden = false;
 };
 
 InViewBanner.prototype.hide = function (callback) {
