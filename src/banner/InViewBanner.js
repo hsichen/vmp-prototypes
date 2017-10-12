@@ -41,7 +41,7 @@ var InViewBanner = function (configs) {
 		'position':'absolute',
 		'right': '0px',
 		'top': '0px'
-	}).click(this.hide.bind(this));
+	});
 	this.infoIcon.css({
 		'position':'absolute',
 		'right': '18px',
@@ -103,8 +103,6 @@ var InViewBanner = function (configs) {
 			.hide();
 
 		this.anchorContainer.append(this.openHandle);
-	} else {
-		this.openHandle =$('<span></span>');	// shortcut placeholder to prevent NPE errors downstream in any child classes
 	}
 
 	$(top.document.body).append(this.anchorContainer);
@@ -113,28 +111,35 @@ var InViewBanner = function (configs) {
 InViewBanner.prototype = Object.create(BannerClass.prototype);
 InViewBanner.prototype.constructor = InViewBanner;
 
-InViewBanner.prototype.show = function () {
+InViewBanner.prototype.show = function (callback) {
     var handle = this.openHandle;
+    var hideHandleCallback = function(){
+		handle.hide();
+	};
+
 	this.banner.animate({
 		'top': this.endTopValue
-	}, 'slow', function(){
-		handle.hide();
-	});
+	}, 'slow', callback || hideHandleCallback);
 };
 
-InViewBanner.prototype.hide = function () {
+InViewBanner.prototype.hide = function (callback) {
 	var handle = this.openHandle;
+	var showHandleCallback = function(){
+  		handle.show();
+    };
+
 	this.banner.animate({
 		'top': '0px'
-	}, 'slow', function(){
-  		handle.show();
-    });
+	}, 'slow', callback || showHandleCallback);
 
     this.isHidden = true;
 };
 
 InViewBanner.prototype.start = function () {
-	this.show();	
+	this.show();
+
+	var self = this;
+	this.closeIcon.click(function() {self.hide();});
 };
 
 module.exports = InViewBanner;
