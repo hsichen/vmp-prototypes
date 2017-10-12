@@ -114,7 +114,9 @@ InViewBanner.prototype.constructor = InViewBanner;
 InViewBanner.prototype.show = function (callback) {
     var handle = this.openHandle;
     var hideHandleCallback = function(){
-		handle.hide();
+		if(handle) {
+			handle.hide();
+		}
 	};
 
 	this.banner.animate({
@@ -125,7 +127,9 @@ InViewBanner.prototype.show = function (callback) {
 InViewBanner.prototype.hide = function (callback) {
 	var handle = this.openHandle;
 	var showHandleCallback = function(){
-  		handle.show();
+		if(handle) {
+	  		handle.show();
+		}
     };
 
 	this.banner.animate({
