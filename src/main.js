@@ -1,6 +1,6 @@
 var ScrollDecoratedInViewBanner = require('./banner/ScrollDecoratedInViewBanner.js');
 var MultiImageInPageBanner = require('./banner/MultiImageInPageBanner.js');
-var RangedScrollInViewBanner = require('./banner/RangedScrollInViewBanner.js');
+var InRangeInViewBanner = require('./banner/InRangeInViewBanner.js');
 
 top.doInView = function (configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
@@ -8,10 +8,10 @@ top.doInView = function (configs) {
 	inviewBanner.start();
 };
 
-top.doInView2 = function (configs) {
-	var inviewBanner = new RangedScrollInViewBanner(configs);
+top.doInRange = function (configs) {
+	var inrangeBanner = new InRangeInViewBanner(configs);
 
-	inviewBanner.start();
+	inrangeBanner.start();
 };
 
 top.doInPage = function (configs){

@@ -10712,7 +10712,7 @@ module.exports = Banner;
 
 var ScrollDecoratedInViewBanner = __webpack_require__(5);
 var MultiImageInPageBanner = __webpack_require__(6);
-var RangedScrollInViewBanner = __webpack_require__(8);
+var InRangeInViewBanner = __webpack_require__(8);
 
 top.doInView = function (configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
@@ -10720,10 +10720,10 @@ top.doInView = function (configs) {
 	inviewBanner.start();
 };
 
-top.doInView2 = function (configs) {
-	var inviewBanner = new RangedScrollInViewBanner(configs);
+top.doInRange = function (configs) {
+	var inrangeBanner = new InRangeInViewBanner(configs);
 
-	inviewBanner.start();
+	inrangeBanner.start();
 };
 
 top.doInPage = function (configs){
@@ -11049,6 +11049,7 @@ var RangedScrollInViewBanner = function(configs) {
 
 	// "super constructor" call
 	InViewBannerClass.call(this, configs);
+	
 }
 
 

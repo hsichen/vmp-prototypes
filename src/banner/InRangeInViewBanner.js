@@ -8,6 +8,7 @@ var RangedScrollInViewBanner = function(configs) {
 
 	// "super constructor" call
 	InViewBannerClass.call(this, configs);
+	
 }
 
 
