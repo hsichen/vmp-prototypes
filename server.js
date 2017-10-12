@@ -3,6 +3,9 @@ var express = require('express');
 var app = express();
 var port = 80;
 
+app.get(/range/, function(req, res) {
+	res.sendFile(__dirname + '/inview_ranged.html');
+});
 app.get(/inview/, function(req, res) {
 	res.sendFile(__dirname + '/inview.html');
 });

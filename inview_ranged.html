@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src="vmp.js" async></script>
+	<script type="text/javascript">
+		var configs = {
+			width:300,
+			height:250,
+			scale: true,
+			reopenable: false,
+			autoclose_delay_millis: 2000,
+			scroll_threshold_begin: 200,
+			scroll_threshold_begin: 1200
+		};
+	</script>
+</head>
+<body onload="doInView2(configs);">
+<p id="desc">Range page for bundled scripts.  InView unit opens between 200 and 1200 scrolled pixels.</p>
+<!-- <button id="bannerRefresh"><b>Pretend Banner Refresh</b></button> -->
+<div style='height:3000px; border:1px solid gray; padding: 15px'>very tall div to force scroll</div>
+</body>
+</html>
