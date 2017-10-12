@@ -103,6 +103,8 @@ var InViewBanner = function (configs) {
 			.hide();
 
 		this.anchorContainer.append(this.openHandle);
+	} else {
+		this.openHandle =$('<span></span>');	// shortcut placeholder to prevent NPE errors downstream in any child classes
 	}
 
 	$(top.document.body).append(this.anchorContainer);
