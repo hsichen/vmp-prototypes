@@ -11075,7 +11075,7 @@ var RangedScrollInViewBanner = function(configs) {
 	$(top).scroll(function() {
 		var scrollTop = $(top).scrollTop();
 		
-		console.log('user scrolled to', scrollTop, "banner is currently", self.isHidden ? "hidden":"showing", "and state is", bannerBusy ? 'locked':'free');
+		console.debug('user scrolled to', scrollTop, "banner is currently", self.isHidden ? "hidden":"showing", "and state is", bannerBusy ? 'locked':'free');
 
 		if(scrollTop >= rangeMin && scrollTop <= rangeMax) {
 			// we show the banner - if it isn't busy
@@ -11103,7 +11103,7 @@ RangedScrollInViewBanner.prototype.start = function () {
 
 	this[startStateFunction]();
 	this.hidden = startStateFunction === 'hide';
-	console.log("banner starting off", this.hidden ? "hidden" : "shown");
+	console.debug("banner starting off", this.hidden ? "hidden" : "shown");
 };
 
 module.exports = RangedScrollInViewBanner;
