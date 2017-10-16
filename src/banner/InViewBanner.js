@@ -14,8 +14,8 @@ var InViewBanner = function (configs) {
 	this.anchorContainer = $('<div></div>')
 		.attr('id', 'inviewAnchor')
 		.css({
-			'margin-left': '-10px',
-			'margin-right': '-10px',
+			'margin-left': '0px',
+			'margin-right': '0px',
 			'position': 'fixed',
 			'bottom': '0px',
 			'width': '100%',

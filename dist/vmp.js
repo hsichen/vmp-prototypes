@@ -10540,8 +10540,8 @@ var InViewBanner = function (configs) {
 	this.anchorContainer = $('<div></div>')
 		.attr('id', 'inviewAnchor')
 		.css({
-			'margin-left': '-10px',
-			'margin-right': '-10px',
+			'margin-left': '0px',
+			'margin-right': '0px',
 			'position': 'fixed',
 			'bottom': '0px',
 			'width': '100%',
@@ -10700,7 +10700,7 @@ function Banner () {
 			'position' : 'relative'
 		});
 
-	this.container = $('<div></div>').addClass('container').css('position', 'relative');
+	this.container = $('<div></div>').addClass('bannerInner').css('position', 'relative');
 	this.infoIcon = $('<img/>').attr('src', INFO_IMAGE).css({
 			'width': '20px',
 			'height' : '20px',
