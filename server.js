@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require('path');
 
 var app = express();
 var port = 80;
@@ -14,6 +15,9 @@ app.get(/inpage/, function(req, res) {
 });
 app.get(/vmp/, function(req, res) {
 	res.sendFile(__dirname + '/dist/vmp.js');
+});
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.listen(port, function(err) {
