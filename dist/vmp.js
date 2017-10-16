@@ -10593,7 +10593,7 @@ var InViewBanner = function (configs) {
 		
 		banner.css({
 			'width': configs.width * scaleFactor,
-			'height': configs.height * scaleFactor,
+			'height': (configs.height+20) * scaleFactor,
 			'left': '0px'
 		});
 		this.container.css('transform', 'scale('+scaleFactor+')');
