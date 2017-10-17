@@ -20,10 +20,22 @@
 
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
-
+    <script type="text/javascript" src="../dist/vmp.js" async></script>
+    <script type="text/javascript">
+        var configs = {
+            selector: '#bannerLocation',
+            width: 728,
+            height: 90,
+            scale: true,
+            indicators: true,
+            num_images: 3,
+            transition_effect: 'fade',	// or 'slide', 'none', etc
+            scroll_threshold: 200
+        };
+    </script>
   </head>
 
-  <body>
+  <body onload="doInPage(configs);">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
