@@ -15,10 +15,22 @@
 
     <!-- Custom styles for this template -->
     <link href="css/business-frontpage.css" rel="stylesheet">
-
+    <script type="text/javascript" src="../dist/vmp.js" async></script>
+    <script type="text/javascript">
+        var configs = {
+            width:300,
+            height:250,
+            scale: true,
+            initial_position: 0.5,
+            scroll_threshold: 25,
+            reopenable: true,
+            autoclose_delay_millis: 1500,
+            scroll_delay_millis: 200
+        };
+    </script>
   </head>
 
-  <body>
+  <body onload="doInView(configs)">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">

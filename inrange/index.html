@@ -19,7 +19,18 @@
 
     <!-- Custom styles for this template -->
     <link href="css/business-casual.css" rel="stylesheet">
-
+    <script type="text/javascript" src="../dist/vmp.js" async></script>
+    <script type="text/javascript">
+        var configs = {
+            width:300,
+            height:250,
+            scale: true,
+            reopenable: false,
+            autoclose_delay_millis: 1500,
+            scroll_threshold_begin: 600,
+            scroll_threshold_end: 1325
+        };
+    </script>
   </head>
 
   <body onload="doInRange(configs);">
@@ -142,18 +153,7 @@
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/vmp.js" async></script>
-    <script type="text/javascript">
-      var configs = {
-        width:300,
-        height:250,
-        scale: true,
-        reopenable: false,
-        autoclose_delay_millis: 1500,
-        scroll_threshold_begin: 600,
-        scroll_threshold_end: 1325
-      };
-    </script>
+
   </body>
 
 </html>

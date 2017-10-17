@@ -18,7 +18,7 @@ function Banner () {
 			'position' : 'relative'
 		});
 
-	this.container = $('<div></div>').addClass('container').css('position', 'relative');
+	this.container = $('<div></div>').addClass('bannerInner').css('position', 'relative');
 	this.infoIcon = $('<img/>').attr('src', INFO_IMAGE).css({
 			'width': '20px',
 			'height' : '20px',
