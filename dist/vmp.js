@@ -10597,7 +10597,7 @@ var InViewBanner = function (configs) {
 			'left': '0px'
 		});
 		this.container.css('transform', 'scale('+scaleFactor+')');
-		this.endTopValue = -1 * (configs.height * scaleFactor + 20);
+		this.endTopValue = -1 * ((configs.height+20) * scaleFactor);
 	}
 
 	if(configs.reopenable) {
