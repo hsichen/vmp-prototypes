@@ -21,6 +21,7 @@ top.doInPortal = function (configs) {
     inportalBanner.start();
     top.up = inportalBanner.moveAdImageUp.bind(inportalBanner);
     top.down = inportalBanner.moveAdImageDown.bind(inportalBanner);
+    top.demoAnimate = inportalBanner.demoAnimate.bind(inportalBanner);
 };
 
 top.doInPage = function (configs){

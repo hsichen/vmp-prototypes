@@ -59,21 +59,21 @@ var InPortalInPageBanner = function (configs) {
 
     if(configs.scale_ad) {
     	var scale = configs.width / configs.ad_width;
-        this.container.css('transform', 'scale('+scale+')');
+        adImage.css('transform', 'scale('+scale+')');
         adImage.css('margin-left', ((scale - 1) * configs.ad_width)/2 + 'px');
+        adImage.css('margin-top', '-' + ((scale - 1) * configs.ad_height)/2 + 'px');
     }
 
     // do scale transformation - math needs is just approximate right now
-    if(configs.scale) {
-        var scale = (this.attachTarget.width() - 17 - 20) / configs.width;
+    if(configs.scale_banner) {
+        var scale = (this.attachTarget.width() - 20) / configs.width;
         banner.css({
-            'width': configs.width * scale + 17 + 20,
+            'width': configs.width * scale + 20,
             'height': configs.height * scale
         });
 
         this.container.css('transform', 'scale('+scale+')');
-        this.container.css('margin-left', scale/2 + 17 + 'px');
-        this.container.find('.adImage').css('left', ((scale - 1) * configs.width)/2 + 'px');
+        this.container.css('margin-left', (this.container.width() * (scale-1))/2 + 'px');
     }
 };
 
@@ -94,6 +94,14 @@ InPortalInPageBanner.prototype.moveAdImageDown = function() {
 
     image.css('margin-top', t+10 + 'px');
     image.attr('top', t+10);
+};
+
+InPortalInPageBanner.prototype.demoAnimate = function() {
+    var image = this.container.find('#adImage');
+
+	image.animate({
+
+	}, 'slow');
 };
 
 module.exports = InPortalInPageBanner;
