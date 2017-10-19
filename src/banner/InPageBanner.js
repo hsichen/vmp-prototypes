@@ -43,23 +43,23 @@ var InPageBanner = function (configs) {
             'height': configs.height,
         });
 
-    banner.append(this.container);
     this.container.append(adImage);
-
     return banner;
-}
+
+};
 
 InPageBanner.prototype = Object.create(BannerClass.prototype);
 InPageBanner.prototype.constructor = InPageBanner;
 
 InPageBanner.prototype.start = function() {
-	this.attachTarget.after(this.banner);
-	this.show();
+    this.attachTarget.after(this.banner);
+    this.show();
 };
 
 InPageBanner.prototype.show = function () {
-	// this.banner.css("height", "0px");
+    this.banner.append(this.container);
+    // this.banner.css("height", "0px");
 	this.banner.slideDown('slow');
-}
+};
 
 module.exports = InPageBanner;
