@@ -37,11 +37,12 @@ var InPortalInPageBanner = function (configs) {
     	.attr('id', 'adImage')
     	.attr('width', configs.ad_width)
     	.attr('height', configs.ad_height)
+		.attr('top', '0')
         .css({
             'width': configs.ad_width,
             'height': configs.ad_height,
-			'position': 'absolute',
-			'left': '0px',
+			// 'position': 'absolute',
+			// 'left': '0px',
         });
 
     this.container.empty();		// clear out superclass' prior operations on the container
@@ -79,5 +80,20 @@ var InPortalInPageBanner = function (configs) {
 InPortalInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
 InPortalInPageBanner.prototype.constructor = InPortalInPageBanner;
 
+InPortalInPageBanner.prototype.moveAdImageUp = function() {
+	var image = this.container.find('#adImage');
+	var t = parseInt(image.attr('top'));
+
+   	image.css('margin-top', t-10 + 'px');
+   	image.attr('top', t-10);
+};
+
+InPortalInPageBanner.prototype.moveAdImageDown = function() {
+    var image = this.container.find('#adImage');
+    var t = parseInt(image.attr('top'));
+
+    image.css('margin-top', t+10 + 'px');
+    image.attr('top', t+10);
+};
 
 module.exports = InPortalInPageBanner;

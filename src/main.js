@@ -19,6 +19,8 @@ top.doInPortal = function (configs) {
     var inportalBanner = new InPortalInPageBanner(configs);
 
     inportalBanner.start();
+    top.up = inportalBanner.moveAdImageUp.bind(inportalBanner);
+    top.down = inportalBanner.moveAdImageDown.bind(inportalBanner);
 };
 
 top.doInPage = function (configs){
