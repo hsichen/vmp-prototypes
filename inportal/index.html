@@ -23,23 +23,23 @@
     <script type="text/javascript" src="../dist/vmp.js" async></script>
     <script type="text/javascript">
         var configs = {
-            width:300,
-            height:250,
-            scale: true,
-            reopenable: false,
-            autoclose_delay_millis: 1500,
-            scroll_threshold_begin: 600,
-            scroll_threshold_end: 1325
+            selector: '#bannerLocation',
+            width:728,
+            height:90,
+            ad_width:300,
+            ad_height:250,
+            scale_banner: true,
+            scale_ad: true,
         };
     </script>
   </head>
 
-  <body onload="doInRange(configs);">
+  <body onload="doInPortal(configs);">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Inuvo Bootstrap</a>
+        <a class="navbar-brand" href="index.html">Multi-InPage <br/>Demo</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -50,7 +50,13 @@
               <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
+              <a class="nav-link" href="about_300x250.html">300x250 (about)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about_160x600.html">160x600 (about)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about_300x600.html">300x600 (about)</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="post.html">Sample Post</a>
@@ -64,11 +70,11 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+    <header class="masthead" style="background-image: url('img/home-bg.jpg'); margin-bottom:0">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="site-heading" style="height:300px">
+            <div class="site-heading" style="height:300px;padding-top:75px">
               <h1>Clean Blog</h1>
               <span class="subheading">A Blog Theme by Start Bootstrap</span>
             </div>
@@ -82,19 +88,22 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="post-preview">
-            <a href="post.html">
-              <h2 class="post-title">
-                Man must explore, and this is exploration at its greatest
-              </h2>
-              <h3 class="post-subtitle">
-                Problems look mighty small from 150 miles up
-              </h3>
-            </a>
+            <h2 class="post-title">
+              Man must explore, and this is exploration at its greatest
+            </h2>
+            <!-- putting test inpage banner here -->
             <p class="post-meta">Posted by
               <a href="#">Start Bootstrap</a>
               on September 24, 2017</p>
           </div>
           <hr>
+          <div id="bannerLocation" style="margin: 10px; padding: 20px; border: 1px solid green">
+            <b>InPortal Banner goes below this placeholder element</b><br/>
+            This buttons allow you to manually scroll the backing Ad image up or down.<br/>
+            <button onclick="up()">Move the ad up</button>
+            <button onclick="down()">Move the ad down</button>
+            <button onclick="demoAnimate()">Sample Animate</button>
+          </div>
           <div class="post-preview">
             <a href="post.html">
               <h2 class="post-title">
