@@ -62,6 +62,8 @@ var InPortalInPageBanner = function (configs) {
         adImage.css('transform', 'scale('+scale+')');
         adImage.css('margin-left', ((scale - 1) * configs.ad_width)/2 + 'px');
         adImage.css('margin-top', '-' + ((scale - 1) * configs.ad_height)/2 + 'px');
+
+        adImage.attr('top', '-' + ((scale - 1) * configs.ad_height)/2);
     }
 
     // do scale transformation - math needs is just approximate right now
@@ -101,7 +103,12 @@ InPortalInPageBanner.prototype.demoAnimate = function() {
 
 	image.animate({
 
-	}, 'slow');
+	}, {
+		duration: 'slow',
+		complete: function() {
+
+		}
+	});
 };
 
 module.exports = InPortalInPageBanner;
