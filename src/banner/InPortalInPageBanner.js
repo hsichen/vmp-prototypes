@@ -99,14 +99,24 @@ InPortalInPageBanner.prototype.moveAdImageDown = function() {
 };
 
 InPortalInPageBanner.prototype.demoAnimate = function() {
-    var image = this.container.find('#adImage');
+    var con = this.container;
+	var image = con.find('#adImage');
+    var t = parseInt(image.attr('top'));
 
 	image.animate({
-
+		'margin-top': '0px'
 	}, {
 		duration: 'slow',
 		complete: function() {
-
+			var b = image.height()  + con.height();
+            image.animate({
+                'margin-top': '-'+b+'px'
+            }, {
+                duration: 'slow',
+                complete: function() {
+					image.animate({'margin-top':t+'px'}, 'slow');
+                }
+            })
 		}
 	});
 };
