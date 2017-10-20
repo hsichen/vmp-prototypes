@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+about_300x250.html<!DOCTYPE html>
 <html lang="en">
 
   <head>
@@ -21,14 +21,26 @@
     <!-- Custom styles for this template -->
     <link href="css/clean-blog.min.css" rel="stylesheet">
 
+    <script type="text/javascript" src="../dist/vmp.js" async></script>
+    <script type="text/javascript">
+        var configs = {
+            selector: '#bannerLocation',
+            width:728,
+            height:90,
+            ad_width:300,
+            ad_height:250,
+            scale_banner: true,
+            scale_ad: true,
+        };
+    </script>
   </head>
 
-  <body>
+  <body onload="doInPage(configs);">
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+        <a class="navbar-brand" href="index.html">Multi-InPage <br/>Demo</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -39,7 +51,13 @@
               <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">About</a>
+              <a class="nav-link" href="about_300x250.html">300x250 (about)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about_160x600.html">160x600 (about)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="about_300x600.html">300x600 (about)</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="post.html">Sample Post</a>
@@ -57,7 +75,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="page-heading">
+            <div class="page-heading" style="padding-top:0px; padding-bottom:20px">
               <h1>About Me</h1>
               <span class="subheading">This is what I do.</span>
             </div>
@@ -70,7 +88,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
+          <p id="bannerLocation">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nostrum molestiae debitis nobis, quod sapiente qui voluptatum, placeat magni repudiandae accusantium fugit quas labore non rerum possimus, corrupti enim modi! Et.</p>
         </div>
