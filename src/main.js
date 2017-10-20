@@ -1,6 +1,7 @@
 var ScrollDecoratedInViewBanner = require('./banner/ScrollDecoratedInViewBanner.js');
 var MultiImageInPageBanner = require('./banner/MultiImageInPageBanner.js');
 var InRangeInViewBanner = require('./banner/InRangeInViewBanner.js');
+var InPortalInPageBanner = require('./banner/InPortalInPageBanner.js');
 
 top.doInView = function (configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
@@ -12,6 +13,15 @@ top.doInRange = function (configs) {
 	var inrangeBanner = new InRangeInViewBanner(configs);
 
 	inrangeBanner.start();
+};
+
+top.doInPortal = function (configs) {
+    var inportalBanner = new InPortalInPageBanner(configs);
+
+    inportalBanner.start();
+    top.up = inportalBanner.moveAdImageUp.bind(inportalBanner);
+    top.down = inportalBanner.moveAdImageDown.bind(inportalBanner);
+    top.demoAnimate = inportalBanner.demoAnimate.bind(inportalBanner);
 };
 
 top.doInPage = function (configs){

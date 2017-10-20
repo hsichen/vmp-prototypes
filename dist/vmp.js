@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10723,9 +10723,80 @@ module.exports = Banner;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ScrollDecoratedInViewBanner = __webpack_require__(5);
-var MultiImageInPageBanner = __webpack_require__(6);
+var $ = __webpack_require__(0);
+var samples = __webpack_require__(1);
+var BannerClass = __webpack_require__(3);
+
+var InPageBanner = function (configs) {
+	if(!configs) {
+		throw new Error('configs are required');
+	}
+
+	// "super constructor" call
+	var banner = BannerClass.call(this);
+
+	this.attachTarget = $(configs.selector);
+
+	if(this.attachTarget.length === 0) {
+		return;
+	}
+
+    banner.css({
+			'width': (configs.width + 20) + 'px',		// accounts for icons
+			'height': configs.height + 'px'
+		});
+
+	banner.append(this.closeIcon.css({
+			'position': 'absolute',
+			'top': 0,
+			'right': 0
+		})
+	);
+	banner.append(this.infoIcon.css({
+			'position': 'absolute',
+			'top': 21,
+			'right': 0
+		})
+	);
+
+    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height))
+    	.attr('id', 'adImage')
+    	.attr('width', configs.width)
+    	.attr('height', configs.height)
+        .css({
+            'width': configs.width,
+            'height': configs.height,
+        });
+
+    this.container.append(adImage);
+    return banner;
+
+};
+
+InPageBanner.prototype = Object.create(BannerClass.prototype);
+InPageBanner.prototype.constructor = InPageBanner;
+
+InPageBanner.prototype.start = function() {
+    this.attachTarget.after(this.banner);
+    this.show();
+};
+
+InPageBanner.prototype.show = function () {
+    this.banner.append(this.container);
+    // this.banner.css("height", "0px");
+	this.banner.slideDown('slow');
+};
+
+module.exports = InPageBanner;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var ScrollDecoratedInViewBanner = __webpack_require__(6);
+var MultiImageInPageBanner = __webpack_require__(7);
 var InRangeInViewBanner = __webpack_require__(8);
+var InPortalInPageBanner = __webpack_require__(9);
 
 top.doInView = function (configs) {
 	var inviewBanner = new ScrollDecoratedInViewBanner(configs);
@@ -10737,6 +10808,15 @@ top.doInRange = function (configs) {
 	var inrangeBanner = new InRangeInViewBanner(configs);
 
 	inrangeBanner.start();
+};
+
+top.doInPortal = function (configs) {
+    var inportalBanner = new InPortalInPageBanner(configs);
+
+    inportalBanner.start();
+    top.up = inportalBanner.moveAdImageUp.bind(inportalBanner);
+    top.down = inportalBanner.moveAdImageDown.bind(inportalBanner);
+    top.demoAnimate = inportalBanner.demoAnimate.bind(inportalBanner);
 };
 
 top.doInPage = function (configs){
@@ -10752,7 +10832,7 @@ top.doInPage = function (configs){
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
@@ -10835,12 +10915,12 @@ ScrollDecoratedInViewBanner.prototype.getTargetTopPosition = function () {
 module.exports = ScrollDecoratedInViewBanner;
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $ = __webpack_require__(0);
 var samples = __webpack_require__(1);
-var InPageBannerClass = __webpack_require__(7);
+var InPageBannerClass = __webpack_require__(4);
 
 // constants
 var INDICATOR_ACTIVE_IMAGE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAzBJREFUeNqkU11oFFcU/u6dmd0x+xOzZuMqrhuN+UFj9KHShz6UghVSKbQgKBgEFV8U9aVCUBQEBd+EKkos8UGwLS0pprUPdcE2STXxh+xGjImJa/520w1rNpv9ndmd2dszrm959MDH3HPnnO8759x72XAoDMskSYJB8Nhln09bOp43zPZZjfl1E4pPZUvr7OXnyzb3rWhJfmjkc+AMMIwS5PfZQqDIJGxSjGNyLnXzasIldeu1iNhcAONwpTXPXpFsOLMmub/NjT9GbWpHQdfTnFJZKDwCrQy0utjFZFa/sHt2IyZddfBtAL6pAeokIJgDBv+j6LiG6+4ITviN8dBy+QtN1+IYGBxEfGL064XxF2J9T0LgsRA/FcUKSxF2TlOpPSXR/ei1MKdGfn06HAbntOe1lc91znkw76jFw13AAQW4UgC8GaA6C7QTTKoyFADatsk4GluL17q6z1/F9yL2KvT5yPikwM9J0TFVUTuUJlYLZQL50IXwLglhFTZmkH+/KDr/mRXmzMsu7lWVQ4/TJClL+G4dECWlOxr1a7cmhIrRb2oOnWmghWYSqOXoXZZQ4LZdXOJsc9yaoswQoKQQlQsKRJFQ/kBgrfNAJFNx/Q6GWIm2SvBwvWRO+FWiX1zGW+r7U0uZpg5aQ//wNQiU3CoqBNPxDDYJDYrCFnk0W7jz2VobkEzgcjiFOiI46baiCPOEBUIEqCfFS3S0YSKNhuZwwCvglMQTHl3MPAqsMgdOtbrx24M3+DMl8H09cHsj0Ehlr6d2DjuBiW0V9X3352A3C9i/1YU384u9+CsYxIuhgT3JTEpsv/ZM4Pyg6IrpK+7BvClEwy/TAqeD4t5kQqRjEz8GHwTB+vv7kStoaPbVnPXUN13+tncGf4cTqGqqQ3uLBx5Vwr+xLMZCcdiUMno6tmKPMzc8NPb2S8WuJllfX9/748rmCtjsrT7Y0tzY9ftsyXFj5B36Enm65mVscdjR0bgax3fUwJlP3B0anzmiqKuKiiyjQkBmWg+qZEDlqPmkYcMxm9v9Vc5kAeJWuMSSDkN7NhqJ/jCXyg5Vu5xg9MgkiYNZF+1j7H8BBgBpyaYfXtj5QgAAAABJRU5ErkJggg==";
@@ -10979,76 +11059,6 @@ MultiImageInPageBanner.prototype.handleScroll = function() {
 module.exports = MultiImageInPageBanner;
 
 /***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__(0);
-var samples = __webpack_require__(1);
-var BannerClass = __webpack_require__(3);
-
-var InPageBanner = function (configs) {
-	if(!configs) {
-		throw new Error('configs are required');
-	}
-
-	// "super constructor" call
-	var banner = BannerClass.call(this);
-
-	this.attachTarget = $(configs.selector);
-
-	if(this.attachTarget.length === 0) {
-		return;
-	}
-
-    banner.css({
-			'width': (configs.width + 20) + 'px',		// accounts for icons
-			'height': configs.height + 'px'
-		});
-
-	banner.append(this.closeIcon.css({
-			'position': 'absolute',
-			'top': 0,
-			'right': 0
-		})
-	);
-	banner.append(this.infoIcon.css({
-			'position': 'absolute',
-			'top': 21,
-			'right': 0
-		})
-	);
-
-    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.width, configs.height))
-    	.attr('id', 'adImage')
-    	.attr('width', configs.width)
-    	.attr('height', configs.height)
-        .css({
-            'width': configs.width,
-            'height': configs.height,
-        });
-
-    banner.append(this.container);
-    this.container.append(adImage);
-
-    return banner;
-}
-
-InPageBanner.prototype = Object.create(BannerClass.prototype);
-InPageBanner.prototype.constructor = InPageBanner;
-
-InPageBanner.prototype.start = function() {
-	this.attachTarget.after(this.banner);
-	this.show();
-};
-
-InPageBanner.prototype.show = function () {
-	// this.banner.css("height", "0px");
-	this.banner.slideDown('slow');
-}
-
-module.exports = InPageBanner;
-
-/***/ }),
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11107,6 +11117,135 @@ RangedScrollInViewBanner.prototype.start = function () {
 };
 
 module.exports = RangedScrollInViewBanner;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__(0);
+var samples = __webpack_require__(1);
+var InPageBannerClass = __webpack_require__(4);
+
+var InPortalInPageBanner = function (configs) {
+	if(!configs) {
+		throw new Error('configs are required');
+	}
+
+	// "super constructor" call
+	var banner = InPageBannerClass.call(this, configs);
+
+	this.attachTarget = $(configs.selector);
+
+	if(this.attachTarget.length === 0) {
+		return;
+	}
+
+    banner.css({
+		'width': (configs.width + 20) + 'px',		// accounts for icons
+		'height': configs.height + 'px'
+	});
+	banner.append(this.closeIcon.css({
+			'position': 'absolute',
+			'top': 0,
+			'right': 0
+		})
+	);
+    banner.append(this.infoIcon.css({
+			'position': 'absolute',
+			'top': 21,
+			'right': 0
+		})
+	);
+
+    var adImage = $('<img/>').attr('src', '//' + samples.get(configs.ad_width, configs.ad_height))
+    	.attr('id', 'adImage')
+    	.attr('width', configs.ad_width)
+    	.attr('height', configs.ad_height)
+		.attr('top', '0')
+        .css({
+            'width': configs.ad_width,
+            'height': configs.ad_height,
+			// 'position': 'absolute',
+			// 'left': '0px',
+        });
+
+    this.container.empty();		// clear out superclass' prior operations on the container
+	this.container.css({
+		'border': '1px solid gray',		// apply any custom css to override
+        'position': 'absolute',
+		'left': '0px',
+        'width': configs.width + 'px',		// accounts for icons
+        'height': configs.height + 'px',
+	});
+
+    // banner.append(this.container);
+    this.container.append(adImage);
+
+    if(configs.scale_ad) {
+    	var scale = configs.width / configs.ad_width;
+        adImage.css('transform', 'scale('+scale+')');
+        adImage.css('margin-left', ((scale - 1) * configs.ad_width)/2 + 'px');
+        adImage.css('margin-top', '-' + ((scale - 1) * configs.ad_height)/2 + 'px');
+
+        adImage.attr('top', '-' + ((scale - 1) * configs.ad_height)/2);
+    }
+
+    // do scale transformation - math needs is just approximate right now
+    if(configs.scale_banner) {
+        var scale = (this.attachTarget.width() - 20) / configs.width;
+        banner.css({
+            'width': configs.width * scale + 20,
+            'height': configs.height * scale
+        });
+
+        this.container.css('transform', 'scale('+scale+')');
+        this.container.css('margin-left', (this.container.width() * (scale-1))/2 + 'px');
+    }
+};
+
+InPortalInPageBanner.prototype = Object.create(InPageBannerClass.prototype);
+InPortalInPageBanner.prototype.constructor = InPortalInPageBanner;
+
+InPortalInPageBanner.prototype.moveAdImageUp = function() {
+	var image = this.container.find('#adImage');
+	var t = parseInt(image.attr('top'));
+
+   	image.css('margin-top', t-10 + 'px');
+   	image.attr('top', t-10);
+};
+
+InPortalInPageBanner.prototype.moveAdImageDown = function() {
+    var image = this.container.find('#adImage');
+    var t = parseInt(image.attr('top'));
+
+    image.css('margin-top', t+10 + 'px');
+    image.attr('top', t+10);
+};
+
+InPortalInPageBanner.prototype.demoAnimate = function() {
+    var con = this.container;
+	var image = con.find('#adImage');
+    var t = parseInt(image.attr('top'));
+
+	image.animate({
+		'margin-top': '0px'
+	}, {
+		duration: 'slow',
+		complete: function() {
+			var b = image.height()  + con.height();
+            image.animate({
+                'margin-top': '-'+b+'px'
+            }, {
+                duration: 'slow',
+                complete: function() {
+					image.animate({'margin-top':t+'px'}, 'slow');
+                }
+            })
+		}
+	});
+};
+
+module.exports = InPortalInPageBanner;
 
 /***/ })
 /******/ ]);
